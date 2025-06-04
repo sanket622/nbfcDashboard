@@ -15,13 +15,16 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import AssignRoleDialog from './AssignRoleDialog';
 import EditAssignRole from './EditAssignRole';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteAssociateSubAdmin, fetchAssociateSubAdmins, updateAssociateSubAdminStatus } from '../../../redux/managerole/roleModuleSlice';
+import { deleteAssociateSubAdmin, fetchAssociateSubAdmins, fetchModulesByRole, fetchRoles, updateAssociateSubAdmin, updateAssociateSubAdminStatus } from '../../../redux/managerole/roleModuleSlice';
 import EditIcon from '@mui/icons-material/Edit';
 import ActivateModal from './ActivateModal';
 import DeactivateModal from './DeactivateModal';
 import DeleteModal from './DeleteModal';
 import { useSnackbar } from 'notistack';
 import { Delete } from '@mui/icons-material';
+import { useForm, Controller } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 const ChevronLeftIcon = () => (
     <svg
@@ -65,11 +68,17 @@ const ManageRoles = () => {
     const [deleteModal, setDeleteModal] = useState(false);
     const [deactivateModal, setDeactivateModal] = useState(false);
     const [activateModal, setActivateModal] = useState(false);
+    const [editForm, setEditForm] = useState({
+        userName: '',
+        role: null,
+        module: [],
+        mobile: ''
+    });
 
     const { enqueueSnackbar } = useSnackbar();
 
     const dispatch = useDispatch();
-    const { associateSubAdmins, loading, error, totalCount, totalPages } = useSelector((state) => state.roleModule);
+    const { associateSubAdmins, loading, error, totalCount, totalPages, roles, modules } = useSelector((state) => state.roleModule);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -93,40 +102,99 @@ const ManageRoles = () => {
         setSelectedUser(user);
         setActivateModal(true);
     };
+    const schema = yup.object().shape({
+        userName: yup.string().required('User name is required'),
+        role: yup.object().nullable().required('Role is required'),
+        module: yup.array().min(1, 'At least one module is required'),
+        mobile: yup.string().required('Mobile is required'),
+    });
+
+    const {
+        control,
+        handleSubmit,
+        setValue,
+        reset,
+        watch,
+        formState: { errors },
+    } = useForm({
+        resolver: yupResolver(schema),
+        defaultValues: {
+            userName: '',
+            role: null,
+            module: [],
+            mobile: '',
+        },
+    });
+
+    const onEditFormSubmit = async (data) => {
+        if (!selectedEmployee?.id) {
+            enqueueSnackbar('No Sub Admin selected', { variant: 'error' });
+            return;
+        }
+        const payload = {
+            name: data.userName,
+            mobile: data.mobile,
+            role: data.role.id,
+            modules: data.module.map((m) => m.id),
+        };
+        try {
+            const result = await dispatch(updateAssociateSubAdmin(selectedEmployee.id, payload));
+            if (result?.success === true) {
+                enqueueSnackbar('Role updated successfully!', { variant: 'success' });
+                setEditAssignRoleOpen(false);
+            } else {
+                throw new Error(result.payload || 'Update failed');
+            }
+        } catch (error) {
+            enqueueSnackbar(error.message || 'Update error', { variant: 'error' });
+        }
+    };
 
     const handleDelete = async () => {
         try {
-          const result = await dispatch(deleteAssociateSubAdmin(selectedUser.id));
-      
-          if (result.type.includes('fulfilled')) {
-            enqueueSnackbar('User deleted successfully', { variant: 'success' });
-          } else {
-            throw new Error(result.payload || 'Failed to delete user');
-          }
+            const result = await dispatch(deleteAssociateSubAdmin(selectedUser.id));
+
+            if (result?.success === true) {
+                enqueueSnackbar('User deleted successfully', { variant: 'success' });
+            } else {
+                throw new Error(result.payload || 'Failed to delete user');
+            }
         } catch (error) {
-          enqueueSnackbar(error.message || 'Failed to delete user', { variant: 'error' });
+            enqueueSnackbar(error.message || 'Failed to delete user', { variant: 'error' });
         } finally {
-          setDeleteModal(false);
+            setDeleteModal(false);
         }
-      };
-      
-      const updateUserStatus = async (id, isActive) => {
+    };
+
+    const updateUserStatus = async (id, isActive) => {
         try {
-          const result = await dispatch(updateAssociateSubAdminStatus(id, isActive));
-      
-          if (result.type.includes('fulfilled')) {
-            enqueueSnackbar(`User ${isActive ? 'activated' : 'deactivated'} successfully`, {
-              variant: 'success',
-            });
-          } else {
-            throw new Error(result.payload || 'Failed to update user status');
-          }
+            const result = await dispatch(updateAssociateSubAdminStatus(id, isActive));
+
+            if (result?.success === true) {
+                enqueueSnackbar(`User ${isActive ? 'activated' : 'deactivated'} successfully`, {
+                    variant: 'success',
+                });
+            } else {
+                throw new Error(result?.payload || 'Failed to update user status');
+            }
         } catch (error) {
-          enqueueSnackbar(error.message || 'Failed to update user status', { variant: 'error' });
+            enqueueSnackbar(error?.message || 'Failed to update user status', { variant: 'error' });
         }
-      };
-      
-    
+    };
+
+    useEffect(() => {
+        dispatch(fetchRoles());
+    }, [dispatch]);
+
+    const selectedRole = watch('role');
+
+
+    useEffect(() => {
+        if (selectedRole?.id) {
+          dispatch(fetchModulesByRole(selectedRole.id));
+        }
+      }, [selectedRole?.id, dispatch]);
+
     return (
         <>
             <div className="p-6">
@@ -236,8 +304,16 @@ const ManageRoles = () => {
                                                     style={{ color: '#0000FF', padding: '6px' }}
                                                     onClick={() => {
                                                         setSelectedEmployee(emp);
+                                                        reset({
+                                                            userName: emp.name || '',
+                                                            role: emp.role ? { id: emp.role.id, label: emp.role.roleName } : null,
+                                                            module: emp.modules?.map((m) => ({ id: m.id, label: m.moduleName })) || [],
+                                                            mobile: emp.mobile || '',
+                                                        });
                                                         setEditAssignRoleOpen(true);
                                                     }}
+
+
                                                 >
                                                     <EditIcon />
                                                 </IconButton>
@@ -249,7 +325,7 @@ const ManageRoles = () => {
                                                     size="small"
                                                     onClick={() => openDeleteModal(emp)}
                                                 >
-                                                    <Delete/>
+                                                    <Delete />
                                                 </IconButton>
                                             </TableCell>
                                         </TableRow>
@@ -314,13 +390,20 @@ const ManageRoles = () => {
                 </div>
             </div>
 
-
             {assignRoleOpen && (
                 <AssignRoleDialog open={assignRoleOpen} onClose={() => setAssignRoleOpen(false)} />
             )}
 
-            {/* {editAssignRoleOpen && (
-                <EditAssignRole open={editAssignRoleOpen} onClose={() => setEditAssignRoleOpen(false)} />
+            {editAssignRoleOpen && (
+                <EditAssignRole
+                    open={editAssignRoleOpen}
+                    onClose={() => setEditAssignRoleOpen(false)}
+                    control={control}
+                    errors={errors}
+                    onSubmit={handleSubmit(onEditFormSubmit)}
+                    roles={roles}
+                    modules={modules}
+                />
             )}
 
             {activateModal && (
@@ -348,9 +431,7 @@ const ManageRoles = () => {
                     setDeleteModal={setDeleteModal}
                     open={deleteModal}
                 />
-            )} */}
-
-
+            )}
         </>
     );
 };

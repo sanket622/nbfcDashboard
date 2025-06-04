@@ -257,7 +257,7 @@ export const deleteAssociateSubAdmin = (id) => async (dispatch) => {
         `https://api.earnplus.net/api/v1/associate/associateSubAdmin/deleteSubAdmin/${id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
-          data: { id },
+         
         }
       );
       dispatch(deleteSubAdminSuccess(id));

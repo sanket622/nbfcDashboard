@@ -16,8 +16,8 @@ const DeleteModal = ({ selectedUser, handleDelete, setDeleteModal }) => {
 
                 <div className="p-4 flex justify-between bg-gray-50">
                     <div className="text-sm text-gray-600">
-                        <p className="font-medium">{selectedUser?.name}</p>
-                        <p>{selectedUser?.email}</p>
+                        <p className="font-medium">Name: {selectedUser?.name}</p>
+                        <p>Email: {selectedUser?.email}</p>
                     </div>
                 </div>
 
