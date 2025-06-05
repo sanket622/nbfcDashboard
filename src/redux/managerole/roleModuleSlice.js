@@ -230,7 +230,7 @@ export const fetchAssociateSubAdmins = (page = 1, limit = 10) => async (dispatch
 
 
 // Update/Edit sub admin
-export const updateAssociateSubAdmin = (id, updateData) => async (dispatch) => {
+export const updateAssociateSubAdmin = (id, updateData, enqueueSnackbar, callback) => async (dispatch) => {
     dispatch(updateSubAdminStart());
     try {
         const token = localStorage.getItem('accessToken');
@@ -241,8 +241,15 @@ export const updateAssociateSubAdmin = (id, updateData) => async (dispatch) => {
                 headers: { Authorization: `Bearer ${token}` },
             }
         );
-       
-        dispatch(updateSubAdminSuccess({ ...updateData, id }));
+        console.log(res);
+        
+        if (res?.data?.success === true) {
+            dispatch(updateSubAdminSuccess({ ...updateData, id }));
+                enqueueSnackbar('Role updated successfully!', { variant: 'success' });
+                callback()
+            } else {
+                throw new Error(res?.data?.payload || 'Update failed');
+            }
     } catch (err) {
         dispatch(updateSubAdminFailure(err.message));
     }

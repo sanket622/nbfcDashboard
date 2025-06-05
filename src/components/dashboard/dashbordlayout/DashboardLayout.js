@@ -36,7 +36,7 @@ const DashboardLayout = () => {
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
   return (
-    <div className="flex" style={{ height: "100vh" }}>
+    <div className="flex  bg-gray-100" style={{ height: "100vh" }}>
       <Navbar />
 
       {/* <div
@@ -75,7 +75,7 @@ const DashboardLayout = () => {
             </button>
           </div>
          
-            <div className="mt-14">
+            <div className="mt-14 p-0 m-0 h-full">
               <Routes>
                 <Route path="/home" element={<DashboardHeader />} />
                 <Route path="/manageroles" element={<ManageRoles />} />

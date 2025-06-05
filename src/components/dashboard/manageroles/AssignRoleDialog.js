@@ -87,6 +87,9 @@ const AssignRoleDialog = ({ onClose, open }) => {
         dispatch(submitAssignRole(data));
     };
 
+    const onError = (e) => console.log(e);
+    
+
 
     return (
         <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth PaperProps={{ sx: { borderRadius: 3 } }}>
@@ -99,7 +102,7 @@ const AssignRoleDialog = ({ onClose, open }) => {
                         <h1 className="text-lg font-medium text-gray-900 ml-2">Assign Role</h1>
                     </div>
 
-                    <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-4">
+                    <form onSubmit={handleSubmit(onSubmit, onError)} className="p-6 space-y-4">
 
                         {/* User Name */}
                         <div>

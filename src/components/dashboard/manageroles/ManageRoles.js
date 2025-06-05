@@ -137,17 +137,9 @@ const ManageRoles = () => {
             role: data.role.id,
             modules: data.module.map((m) => m.id),
         };
-        try {
-            const result = await dispatch(updateAssociateSubAdmin(selectedEmployee.id, payload));
-            if (result?.success === true) {
-                enqueueSnackbar('Role updated successfully!', { variant: 'success' });
-                setEditAssignRoleOpen(false);
-            } else {
-                throw new Error(result.payload || 'Update failed');
-            }
-        } catch (error) {
-            enqueueSnackbar(error.message || 'Update error', { variant: 'error' });
-        }
+         dispatch(updateAssociateSubAdmin(selectedEmployee.id, payload, enqueueSnackbar, () => {
+            setEditAssignRoleOpen(false)
+         }));
     };
 
     const handleDelete = async () => {
@@ -261,12 +253,8 @@ const ManageRoles = () => {
                                             <CircularProgress />
                                         </TableCell>
                                     </TableRow>
-                                ) : error ? (
-                                    <TableRow>
-                                        <TableCell colSpan={9} align="center" sx={{ color: 'red' }}>
-                                            {error}
-                                        </TableCell>
-                                    </TableRow>
+                                
+                                   
                                 ) : !Array.isArray(associateSubAdmins) || associateSubAdmins.length === 0 ? (
                                     <TableRow>
                                         <TableCell colSpan={9} align="center">
