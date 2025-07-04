@@ -189,7 +189,7 @@ const ManageRoles = () => {
 
     return (
         <>
-            <div className="p-6">
+            <div className="p-4">
                 <h1 className="text-[24px] font-semibold mb-4">Manage Roles</h1>
                 <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100">
                     <div className="p-4 flex justify-between items-center">
@@ -234,9 +234,9 @@ const ManageRoles = () => {
                                         'Name',
                                         'Email',
                                         'Phone Number',
-                                        'Status',   // new
+                                        'Status',
                                         'Edit',
-                                        'Delete',   // new
+                                        'Delete',
                                     ].map((header) => (
                                         <TableCell key={header} sx={{ fontSize: '14px', color: '#0000FF' }}>
                                             {header}

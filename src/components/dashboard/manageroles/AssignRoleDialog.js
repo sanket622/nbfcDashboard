@@ -75,10 +75,10 @@ const AssignRoleDialog = ({ onClose, open }) => {
             enqueueSnackbar('Role assigned successfully!', { variant: 'success' });
             reset();
             dispatch(resetAssignRoleState());
-            onClose(); // Close dialog on success
+            onClose(); 
         }
         if (error) {
-            enqueueSnackbar(error, { variant: 'error' });
+            enqueueSnackbar('User with this mobile number or Email already exists!', { variant: 'error' });
             dispatch(resetAssignRoleState());
         }
     }, [success, error, enqueueSnackbar, dispatch, reset, onClose]);

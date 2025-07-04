@@ -17,6 +17,8 @@ import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import SettingsIcon from '@mui/icons-material/Settings';
 import ManageEmployer from '../manageroles/ManageRoles';
 import ManageRoles from '../manageroles/ManageRoles';
+import ManageRequest from '../managerequest/ManageRequest';
+import ViewProduct from '../managerequest/ViewProduct';
 
 
 
@@ -27,10 +29,11 @@ const DashboardLayout = () => {
 
   const TABS = [
     { label: "Dashboard", path: 'home', icon: <DashboardIcon />, outlinedIcon: <DashboardOutlinedIcon />, component: <DashboardHeader /> },
-    { label: "Manage Employer", path: 'manageemployer', icon: <PersonIcon />, outlinedIcon: <PersonOutlineIcon />,  },
+    // { label: "Manage Employer", path: 'manageemployer', icon: <PersonIcon />, outlinedIcon: <PersonOutlineIcon />,  },
     { label: "Manage Roles", path: 'manageroles', icon: <PeopleAltIcon />, outlinedIcon: <PeopleOutlineOutlinedIcon />, component: <ManageRoles /> },
-    { label: "Analytics", path: 'analytics', icon: <AnalyticsIcon />, outlinedIcon: <AnalyticsOutlinedIcon />, },
-    { label: "System Config.", path: 'systemconfig.', icon: <SettingsIcon />, outlinedIcon: <SettingsOutlinedIcon />, },
+    { label: "Manage Request", path: 'managerequest', icon: <PeopleAltIcon />, outlinedIcon: <PeopleOutlineOutlinedIcon />, component: <ManageRoles /> },
+    // { label: "Analytics", path: 'analytics', icon: <AnalyticsIcon />, outlinedIcon: <AnalyticsOutlinedIcon />, },
+    // { label: "System Config.", path: 'systemconfig.', icon: <SettingsIcon />, outlinedIcon: <SettingsOutlinedIcon />, },
   ];
 
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
@@ -74,20 +77,22 @@ const DashboardLayout = () => {
               </svg>
             </button>
           </div>
-         
-            <div className="mt-14 p-0 m-0 h-full">
-              <Routes>
-                <Route path="/home" element={<DashboardHeader />} />
-                <Route path="/manageroles" element={<ManageRoles />} />
+
+          <div className="mt-14 p-0 m-0 h-full">
+            <Routes>
+              <Route path="/home" element={<DashboardHeader />} />
+              <Route path="/manageroles" element={<ManageRoles />} />
+              <Route path="/managerequest" element={<ManageRequest />} />
+              <Route path="/viewproducteditdetail/:id" element={<ViewProduct />} />
 
 
-                {/* <Route path="/employees/:id" element={<EmployeeDetailsCard />} /> */}
-              </Routes>
-            </div>
+              {/* <Route path="/employees/:id" element={<EmployeeDetailsCard />} /> */}
+            </Routes>
           </div>
         </div>
       </div>
-    
+    </div>
+
   );
 };
 
