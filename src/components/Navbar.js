@@ -1,21 +1,13 @@
 import * as React from 'react';
 import logo from '../assets/earnlogo.png';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { Avatar, IconButton } from '@mui/material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import PersonIcon from '@mui/icons-material/Person';
-import GroupAddIcon from '@mui/icons-material/GroupAdd';
-import GroupsIcon from '@mui/icons-material/Groups';
 import LogoutIcon from '@mui/icons-material/Logout';
-import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
-import NotificationsActiveOutlinedIcon from '@mui/icons-material/NotificationsActiveOutlined';
-import SettingsIcon from '@mui/icons-material/Settings';
-import ContactPageIcon from '@mui/icons-material/ContactPage';
 import { useDispatch } from 'react-redux';
 import { logout } from '../redux/auth/authSlice';
-
-
+import {fetchRoles} from "../redux/managerole/roleModuleSlice";
 
 function Navbar() {
 
@@ -23,7 +15,6 @@ function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const navigate = useNavigate();
-
 
   const toggleLanguage = () => {
     setLanguage(language === 'en' ? 'hi' : 'en');
@@ -68,6 +59,34 @@ function Navbar() {
     </svg>
   );
 
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+
+    if (!token) {
+      // Token not found: redirect to login
+      navigate('/login', { replace: true });
+      return;
+    }
+
+    // Call API
+    const fetchUserRoles = async () => {
+      try {
+        await dispatch(fetchRoles());
+      } catch (err) {
+        console.error('Error fetching roles:', err);
+
+        // If axios error and has status code
+        if (err?.response && (err?.response?.status === 401 )) {
+          dispatch(logout());
+          localStorage.removeItem('accessToken');
+          navigate('/login', { replace: true });
+        }
+      }
+    };
+
+    fetchUserRoles();
+  }, [dispatch, navigate]);
+
 
   return (
     <div className="bg-white w-full shadow-md fixed" style={{ zIndex: 9 }}>
@@ -98,20 +117,20 @@ function Navbar() {
               <Avatar
                 src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face"
                 alt="Main Admin"
-                className="h-12 w-12 mr-3"
+                className="h-12 w-12 mr-1"
               />
 
               {/* Admin Text */}
-              <span className="text-black font-semibold text-xl mr-0">
-                Abhiraj
-              </span>
+              {/*<span className="text-black font-semibold text-xl mr-0">*/}
+              {/*  Abhiraj*/}
+              {/*</span>*/}
 
               {/* Dropdown Arrow */}
               <ArrowDropDownIcon className="text-[#0000FF] h-8 w-8" />
             </div>
 
             {menuOpen && (
-              <div className="absolute top-16 right-2 w-40 bg-white rounded-lg shadow-lg border z-50 mr-4">
+              <div className="absolute top-16 right-2 w-40 bg-white rounded-lg shadow-lg border z-50 mr-2">
                 {/* Triangle Pointer */}
                 <div className="absolute -top-2 right-12 w-4 h-4 bg-white rotate-45 border-t border-l border-gray-200 z-10"></div>
 

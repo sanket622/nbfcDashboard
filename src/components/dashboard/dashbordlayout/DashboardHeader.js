@@ -23,11 +23,11 @@ export default function Dashboard() {
     const totalApplicants = useSelector(state => state.employeeCard.totalApplicants);
     const loading = useSelector(state => state.employeeCard.loading);
 
-    useEffect(() => {
-        dispatch(fetchTotalEmployeeCard());
-    }, [dispatch]);
+    // useEffect(() => {
+    //     dispatch(fetchTotalEmployeeCard());
+    // }, [dispatch]);
 
-    const [userData] = useState({ name: 'Abhiraj', employees: 560, employeeGrowth: 12, applicants: 1050, applicantGrowth: 5, lastUpdate: 'April 14, 2025' });
+    // const [userData] = useState({ name: 'Abhiraj', employees: 560, employeeGrowth: 12, applicants: 1050, applicantGrowth: 5, lastUpdate: 'April 14, 2025' });
 
     return (
         <>
@@ -45,7 +45,7 @@ export default function Dashboard() {
                                     className="w-full h-full object-cover"
                                 />
                             </div>
-                            <h2 className="text-[#0000FF] text-[18px] font-semibold mb-2">Hello {userData.name}!</h2>
+                            <h2 className="text-[#0000FF] text-[18px] font-semibold mb-2">Hello!</h2>
                             <p className="text-[#8A8A8A] text-[12px]">Good Morning! You have new messages. It's a lot of work today! So let's get started.</p>
                         </div>
                     </div>
