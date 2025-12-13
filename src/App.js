@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css"
 import Login from "./components/auth/Login";
 import NewPassword from "./components/auth/NewPassword";

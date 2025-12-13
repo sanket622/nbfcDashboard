@@ -2,7 +2,7 @@ import { useDispatch } from "react-redux";
 import { setUserEmail, setUserLoginLoading } from "./UserSlice";
 import Swal from "sweetalert2";
 import axios from "axios";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import {EmployerLogin} from '../Api_url'
 
 export const useLoginApi = () => {

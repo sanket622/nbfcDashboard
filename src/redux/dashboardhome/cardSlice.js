@@ -42,7 +42,7 @@ export const fetchTotalEmployeeCard = () => async (dispatch) => {
     dispatch(setLoading(true));
     try {
         const res = await axios.get(
-            "https://api.earnplus.net/api/v1/employer/auth/getCountsForEmployer",
+            `${process.env.REACT_APP_BACKEND_URL}/employer/auth/getCountsForEmployer`,
             { headers: { Authorization: `Bearer ${getToken()}` } }
         );
         const totalEmployees = res?.data?.data?.totalEmployees;

@@ -45,7 +45,7 @@ export const loginUser = (email, password) => async (dispatch) => {
       dispatch(setError(null));
   
       const response = await axios.post(
-        'https://api.earnplus.net/api/v1/associate/auth/loginAssociate',
+        `${process.env.REACT_APP_BACKEND_URL}/associate/auth/loginAssociate`,
         { email, password }
       );
   

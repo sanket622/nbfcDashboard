@@ -33,7 +33,7 @@ export const fetchEmployerProfile = () => async (dispatch) => {
   dispatch(setLoading(true));
   try {
     const res = await axios.get(
-      "https://api.earnplus.net/api/v1/employer/auth/getEmployerProfile",
+      `${process.env.REACT_APP_BACKEND_URL}/employer/auth/getEmployerProfile`,
       { headers: { Authorization: `Bearer ${getToken()}` } }
     );
     dispatch(setProfile(res.data.data));

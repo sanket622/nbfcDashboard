@@ -49,7 +49,7 @@ export const fetchEditRequests = () => async (dispatch) => {
     dispatch(fetchStart());
     try {
         const token = localStorage.getItem('accessToken');
-        const res = await axios.get(`https://api.earnplus.net/api/v1/associate/masterProduct/getAllMasterProductUpdateRequests`, {
+        const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/associate/masterProduct/getAllMasterProductUpdateRequests`, {
             headers: { Authorization: `Bearer ${token}` },
         });
         dispatch(fetchEditSuccess(res.data.data));
@@ -62,7 +62,7 @@ export const fetchDeleteRequests = () => async (dispatch) => {
     dispatch(fetchStart());
     try {
         const token = localStorage.getItem('accessToken');
-        const res = await axios.get(`https://api.earnplus.net/api/v1/associate/masterProduct/getMasterProductDeleteRequests`, {
+        const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/associate/masterProduct/getMasterProductDeleteRequests`, {
             headers: { Authorization: `Bearer ${token}` },
         });
         dispatch(fetchDeleteSuccess(res.data.data));
@@ -77,7 +77,7 @@ export const approveEditRequest = (id, enqueueSnackbar) => async (dispatch) => {
     try {
         const token = localStorage.getItem('accessToken');
         await axios.patch(
-            `https://api.earnplus.net/api/v1/associate/masterProduct/approveMasterProductUpdateRequest/${id}`,
+            `${process.env.REACT_APP_BACKEND_URL}/associate/masterProduct/approveMasterProductUpdateRequest/${id}`,
             {},
             { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -95,7 +95,7 @@ export const rejectEditRequest = (id, reason, enqueueSnackbar) => async (dispatc
     try {
         const token = localStorage.getItem('accessToken');
         await axios.patch(
-            `https://api.earnplus.net/api/v1/associate/masterProduct/rejectMasterProductUpdateRequest/${id}`,
+            `${process.env.REACT_APP_BACKEND_URL}/associate/masterProduct/rejectMasterProductUpdateRequest/${id}`,
             { reason },
             { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -113,7 +113,7 @@ export const handleDeleteRequest = (requestId, action, reason = '', enqueueSnack
     try {
         const token = localStorage.getItem('accessToken');
         await axios.patch(
-            `https://api.earnplus.net/api/v1/associate/masterProduct/handleMasterProductDeleteRequest`,
+            `${process.env.REACT_APP_BACKEND_URL}/associate/masterProduct/handleMasterProductDeleteRequest`,
             { requestId, action, reason },
             { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -131,7 +131,7 @@ export const fetchEditRequestDetails = (id) => async (dispatch) => {
     try {
         const token = localStorage.getItem('accessToken');
         const res = await axios.get(
-            `https://api.earnplus.net/api/v1/associate/masterProduct/getMasterProductUpdateRequestDetails/${id}`,
+            `${process.env.REACT_APP_BACKEND_URL}/associate/masterProduct/getMasterProductUpdateRequestDetails/${id}`,
             { headers: { Authorization: `Bearer ${token}` } }
         );
         dispatch(setProductDetails(res.data.data));

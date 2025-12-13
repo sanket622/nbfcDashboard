@@ -39,7 +39,7 @@ export const {
 } = variantRequestSlice.actions;
 
 const api = axios.create({
-    baseURL: 'https://api.earnplus.net',
+    baseURL: `${process.env.REACT_APP_BACKEND_URL}`,
 });
 
 // Fetch variant edit requests
@@ -48,7 +48,7 @@ export const fetchEditRequests = () => async (dispatch) => {
     try {
         const token = localStorage.getItem('accessToken');
         const res = await api.get(
-            '/api/v1/associate/variantProduct/getAllVariantProductUpdateRequests',
+            '/associate/variantProduct/getAllVariantProductUpdateRequests',
             { headers: { Authorization: `Bearer ${token}` } }
         );
         dispatch(fetchEditSuccess(res.data.data));
@@ -63,7 +63,7 @@ export const fetchDeleteRequests = () => async (dispatch) => {
     try {
         const token = localStorage.getItem('accessToken');
         const res = await api.get(
-            '/api/v1/associate/variantProduct/getVariantProductDeleteRequests',
+            '/associate/variantProduct/getVariantProductDeleteRequests',
             { headers: { Authorization: `Bearer ${token}` } }
         );
         dispatch(fetchDeleteSuccess(res.data.data));
@@ -78,7 +78,7 @@ export const approveEditRequest = (id, enqueueSnackbar) => async (dispatch) => {
     try {
         const token = localStorage.getItem('accessToken');
         await api.patch(
-            `/api/v1/associate/variantProduct/approveVariantProductUpdateRequest/${id}`,
+            `/associate/variantProduct/approveVariantProductUpdateRequest/${id}`,
             {},
             { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -96,7 +96,7 @@ export const rejectEditRequest = (id, reason, enqueueSnackbar) => async (dispatc
     try {
         const token = localStorage.getItem('accessToken');
         await api.patch(
-            '/api/v1/associate/variantProduct/rejectVariantProductUpdateRequest',
+            '/associate/variantProduct/rejectVariantProductUpdateRequest',
             { requestId: id, reason },
             { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -114,7 +114,7 @@ export const handleDeleteRequest = (id, action, reason = '', enqueueSnackbar) =>
     try {
         const token = localStorage.getItem('accessToken');
         await api.patch(
-            '/api/v1/associate/variantProduct/handleVariantProductDeleteRequest',
+            '/associate/variantProduct/handleVariantProductDeleteRequest',
             { requestId: id, action, reason },
             { headers: { Authorization: `Bearer ${token}` } }
         );
