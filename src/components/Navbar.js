@@ -1,13 +1,13 @@
 import * as React from 'react';
 import logo from '../assets/earnlogo.png';
 import { useNavigate } from 'react-router-dom';
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Avatar, IconButton } from '@mui/material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useDispatch } from 'react-redux';
 import { logout } from '../redux/auth/authSlice';
-import {fetchRoles} from "../redux/managerole/roleModuleSlice";
+import { fetchRoles } from "../redux/managerole/roleModuleSlice";
 
 function Navbar() {
 
@@ -76,7 +76,7 @@ function Navbar() {
         console.error('Error fetching roles:', err);
 
         // If axios error and has status code
-        if (err?.response && (err?.response?.status === 401 )) {
+        if (err?.response && (err?.response?.status === 401)) {
           dispatch(logout());
           localStorage.removeItem('accessToken');
           navigate('/login', { replace: true });
@@ -89,15 +89,11 @@ function Navbar() {
 
 
   return (
-    <div className="bg-white w-full shadow-md fixed" style={{ zIndex: 9 }}>
-      <div className="flex justify-between items-center  w-full">
-        <div className="flex items-center cursor-pointer" onClick={toggleLanguage}>
-          <img
-            src={logo}
-            alt=""
-            className="w-[135px] ml-4"
-          />
-        </div>
+    <div className="bg-white w-full shadow-md fixed top-0 left-0  h-[70px] flex items-center px-6 z-50">
+      <div className="flex justify-between items-center w-full px-6">
+        <img src={logo} alt="logo" className="h-10" />
+        {/* <div className="flex items-center cursor-pointer" onClick={toggleLanguage}>
+        </div> */}
 
         <div className="flex items-center space-x-4">
           <div className="relative mr-2">
@@ -135,7 +131,7 @@ function Navbar() {
                 <div className="absolute -top-2 right-12 w-4 h-4 bg-white rotate-45 border-t border-l border-gray-200 z-10"></div>
 
                 {/* Menu Items */}
-               
+
                 <div
                   onClick={() => handleMenuItemClick('Logout')}
                   className="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 cursor-pointer"

@@ -31,7 +31,7 @@ const schema = yup.object().shape({
         .required('Confirm your password'),
 });
 
-const AssignRoleDialog = ({ onClose, open }) => {
+const AssignRoleDialog = ({ onClose, open, onSuccess }) => {
     const dispatch = useDispatch();
     const { roles, modules, success, error } = useSelector((state) => state.roleModule);
     const { enqueueSnackbar } = useSnackbar();
@@ -60,9 +60,9 @@ const AssignRoleDialog = ({ onClose, open }) => {
 
     const selectedRole = useWatch({ control, name: 'role' });
 
-    useEffect(() => {
-        dispatch(fetchRoles());
-    }, [dispatch]);
+    // useEffect(() => {
+    //     dispatch(fetchRoles());
+    // }, [dispatch]);
 
     useEffect(() => {
         if (selectedRole?.id) {
@@ -70,12 +70,19 @@ const AssignRoleDialog = ({ onClose, open }) => {
         }
     }, [selectedRole, dispatch, setValue]);
 
+    // useEffect(() => {
+    //     if (open) {
+    //         dispatch(fetchRoles());
+    //     }
+    // }, [open, dispatch]);
+
+
     useEffect(() => {
-        if (success) {
+        if (success && open) {
             enqueueSnackbar('Role assigned successfully!', { variant: 'success' });
             reset();
             dispatch(resetAssignRoleState());
-            onClose(); 
+            onClose();
         }
         if (error) {
             enqueueSnackbar('User with this mobile number or Email already exists!', { variant: 'error' });
@@ -88,7 +95,7 @@ const AssignRoleDialog = ({ onClose, open }) => {
     };
 
     const onError = (e) => console.log(e);
-    
+
 
 
     return (

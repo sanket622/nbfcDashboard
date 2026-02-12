@@ -48,10 +48,10 @@ export const fetchEditRequests = () => async (dispatch) => {
     try {
         const token = localStorage.getItem('accessToken');
         const res = await api.get(
-            '/associate/variantProduct/getAllVariantProductUpdateRequests',
+            'associate/variantProductUpdateRequest/getAllVariantProductUpdateRequests',
             { headers: { Authorization: `Bearer ${token}` } }
         );
-        dispatch(fetchEditSuccess(res.data.data));
+        dispatch(fetchEditSuccess(res.data.data.data));
     } catch (err) {
         dispatch(fetchFailure(err.message));
     }
@@ -63,10 +63,10 @@ export const fetchDeleteRequests = () => async (dispatch) => {
     try {
         const token = localStorage.getItem('accessToken');
         const res = await api.get(
-            '/associate/variantProduct/getVariantProductDeleteRequests',
+            '/associate/variantProductDeleteRequest/getAllVariantProductDeleteRequests',
             { headers: { Authorization: `Bearer ${token}` } }
         );
-        dispatch(fetchDeleteSuccess(res.data.data));
+        dispatch(fetchDeleteSuccess(res.data.data.data));
     } catch (err) {
         dispatch(fetchFailure(err.message));
     }
@@ -78,7 +78,7 @@ export const approveEditRequest = (id, enqueueSnackbar) => async (dispatch) => {
     try {
         const token = localStorage.getItem('accessToken');
         await api.patch(
-            `/associate/variantProduct/approveVariantProductUpdateRequest/${id}`,
+            `/associate/variantProductUpdateRequest/approveVariantProductUpdateRequest/${id}`,
             {},
             { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -96,7 +96,7 @@ export const rejectEditRequest = (id, reason, enqueueSnackbar) => async (dispatc
     try {
         const token = localStorage.getItem('accessToken');
         await api.patch(
-            '/associate/variantProduct/rejectVariantProductUpdateRequest',
+            '/associate/variantProductUpdateRequest/rejectVariantProductUpdateRequest',
             { requestId: id, reason },
             { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -113,18 +113,18 @@ export const handleDeleteRequest = (id, action, reason = '', enqueueSnackbar) =>
     dispatch(fetchStart());
     try {
         const token = localStorage.getItem('accessToken');
-        await api.patch(
-            '/associate/variantProduct/handleVariantProductDeleteRequest',
-            { requestId: id, action, reason },
+        const res = await api.patch(
+            `associate/variantProductDeleteRequest/handleVariantProductDeleteRequest/${id}`,
+            { action, reason },
             { headers: { Authorization: `Bearer ${token}` } }
         );
         enqueueSnackbar(
-            `Delete request ${action === 'APPROVED' ? 'approved' : 'rejected'}.`,
+            res?.data?.message || 'Action completed successfully',
             { variant: 'success' }
         );
         dispatch(fetchDeleteRequests());
     } catch (err) {
-        enqueueSnackbar(`Error: ${err.message}`, { variant: 'error' });
+        enqueueSnackbar( err?.response?.data?.message || err.message || 'Something went wrong', { variant: 'error' });
         dispatch(fetchFailure(err.message));
     }
 };

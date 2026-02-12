@@ -6,6 +6,8 @@ import ProductEditRequest from './ProductEditRequest';
 import ProductDeleteRequest from './ProductDeleteRequest';
 import VarientEditRequest from "./VarientEditRequest";
 import VarientDeleteRequest from "./VarientDeleteRequest";
+import ProductCreateRequest from "./ProductCreateRequest";
+import VariantCreateRequest from "./VariantCreateRequest";
 
 const ManageRequest = () => {
     const [tabIndex, setTabIndex] = useState(0);
@@ -30,17 +32,21 @@ const ManageRequest = () => {
                         },
                         '& .Mui-selected': {color: '#0000FF'}
                     }}>
+                        <Tab label="Product Create Request"/>
                         <Tab label="Product Edit Request"/>
                         <Tab label="Product Delete Request"/>
+                        <Tab label="Variant Create Request"/>
                         <Tab label="Varient Edit Request"/>
                         <Tab label="Varient Delete Request"/>
                     </Tabs>
 
                     <Box mt={3}>
-                        {tabIndex === 0 && <ProductEditRequest/>}
-                        {tabIndex === 1 && <ProductDeleteRequest/>}
-                        {tabIndex === 2 && <VarientEditRequest/>}
-                        {tabIndex === 3 && <VarientDeleteRequest/>}
+                        {tabIndex === 0 && <ProductCreateRequest/>}
+                        {tabIndex === 1 && <ProductEditRequest/>}
+                        {tabIndex === 2 && <ProductDeleteRequest/>}
+                        {tabIndex === 3 && <VariantCreateRequest/>}
+                        {tabIndex === 4 && <VarientEditRequest/>}
+                        {tabIndex === 5 && <VarientDeleteRequest/>}
                     </Box>
                 </Box>
             </div>

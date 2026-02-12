@@ -1,4 +1,4 @@
-import {configureStore} from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
 import authReducer from '../redux/auth/authSlice';
 import employeeReducer from './employee/employeeSlice';
 import cardReducer from './dashboardhome/cardSlice';
@@ -6,7 +6,7 @@ import employerProfileReducer from './dashboardhome/employerProfileSlice';
 import roleModuleReducer from './managerole/roleModuleSlice';
 import productRequestReducer from '../redux/managerequest/productRequestSlice';
 import variantRequestReducer from '../redux/managerequest/variantRequestSlice';
-
+import variantCreateRequestReducer from '../redux/managerequest/variantCreateRequestSlice';
 
 export const store = configureStore({
     reducer: {
@@ -17,6 +17,7 @@ export const store = configureStore({
         roleModule: roleModuleReducer,
         productRequest: productRequestReducer,
         variantRequest: variantRequestReducer,
+        variantCreateRequest: variantCreateRequestReducer
 
     },
 });

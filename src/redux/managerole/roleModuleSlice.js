@@ -261,7 +261,7 @@ export const deleteAssociateSubAdmin = (id) => async (dispatch) => {
     try {
       const token = localStorage.getItem('accessToken');
       await axios.delete(
-        `${process.env.REACT_APP_BACKEND_URL}/associate/associateSubAdmin/deleteSubAdmin/${id}`,
+        `${process.env.REACT_APP_BACKEND_URL}/associate/associateSubAdmin/deleteAssociateSubAdminByAssociate/${id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
          

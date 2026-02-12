@@ -1,8 +1,9 @@
-import React, {useEffect, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {
-    Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress, Button
-} from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Button, Paper } from '@mui/material';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CancelIcon from '@mui/icons-material/Cancel';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import {
     fetchEditRequests,
     approveEditRequest,
@@ -10,16 +11,23 @@ import {
 } from '../../../redux/managerequest/productRequestSlice';
 import ActivateModal from './ActivateModal';
 import DeleteModal from './DeleteModal';
-import {useSnackbar} from 'notistack';
-import {useNavigate} from 'react-router-dom';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import IconButton from '@mui/material/IconButton';
+import { useSnackbar } from 'notistack';
+import ReusableTable from '../../subcompotents/ReusableTable';
+import ChangesModal from './ChangesModal';
+import { normalizeProductChanges } from '../../../utils/normalizeProductChanges';
+import RemarkModal from './RemarkModal';
 
 const ProductEditRequest = () => {
-    const navigate = useNavigate();
-    const {enqueueSnackbar} = useSnackbar();
+    const { enqueueSnackbar } = useSnackbar();
     const dispatch = useDispatch();
-    const {editRequests = [], loading = false} = useSelector((state) => state.productRequest || {});
+    const [viewModal, setViewModal] = useState(false);
+    const [detailData, setDetailData] = useState(null);
+    const [detailLoading, setDetailLoading] = useState(false);
+    const [remarkModalOpen, setRemarkModalOpen] = useState(false);
+    const [selectedRow, setSelectedRow] = useState(null);
+    const { editRequests = [], loading = false, error } = useSelector(
+        (state) => state.productRequest || {}
+    );
 
     const [approveModal, setApproveModal] = useState(false);
     const [rejectModal, setRejectModal] = useState(false);
@@ -28,6 +36,32 @@ const ProductEditRequest = () => {
     useEffect(() => {
         dispatch(fetchEditRequests());
     }, [dispatch]);
+
+    /* ===================== ACTION HANDLERS ===================== */
+    const openViewChanges = async (row) => {
+        try {
+            setViewModal(true);
+            setDetailLoading(true);
+
+            const token = localStorage.getItem('accessToken');
+
+            const res = await fetch(
+                `${process.env.REACT_APP_BACKEND_URL}/associate/masterProductUpdateRequest/getMasterProductUpdateRequestDetail/${row.id}`,
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                }
+            );
+
+            const json = await res.json();
+            const normalized = normalizeProductChanges(json.data);
+            setDetailData(normalized);
+        } catch {
+            enqueueSnackbar('Failed to fetch changes', { variant: 'error' });
+            setViewModal(false);
+        } finally {
+            setDetailLoading(false);
+        }
+    };
 
     const openApproveModal = (item) => {
         setSelectedRequest(item);
@@ -40,119 +74,194 @@ const ProductEditRequest = () => {
     };
 
     const handleApprove = () => {
-        dispatch(approveEditRequest(selectedRequest?.id, enqueueSnackbar));
+        dispatch(
+            approveEditRequest(
+                selectedRequest?.id,
+                enqueueSnackbar
+            )
+        );
         setApproveModal(false);
     };
 
-    // Reject
     const handleReject = (reason) => {
-        dispatch(rejectEditRequest(selectedRequest?.id, reason, enqueueSnackbar));
+        dispatch(
+            rejectEditRequest(
+                selectedRequest?.id,
+                reason,
+                enqueueSnackbar
+            )
+        );
         setRejectModal(false);
     };
 
-    return (
-        <>
-            <TableContainer component={Paper}
-                            sx={{
-                                overflowX: 'auto',
-                                borderRadius: 2,
-                                '&::-webkit-scrollbar': {height: '8px'},
-                                '&::-webkit-scrollbar-thumb': {backgroundColor: '#0000FF', borderRadius: '4px'},
-                                '&::-webkit-scrollbar-track': {backgroundColor: '#f1f1f1'},
+    /* ===================== TABLE COLUMNS ===================== */
+    const columns = [
+        {
+            key: 'sno',
+            label: 'Sno.',
+            render: (_, __, index) => index + 1,
+        },
+        {
+            key: 'productId',
+            label: 'Product Id',
+            render: (_, row) => row?.masterProduct?.productId,
+        },
+        {
+            key: 'masterproductName',
+            label: 'Master Product Name',
+            render: (_, row) => row?.masterProduct?.productName,
+        },
+        {
+            key: 'masterproductcode',
+            label: 'Master Product Code',
+            render: (_, row) => row?.masterProduct?.productCode,
+        },
+        {
+            key: 'productName',
+            label: 'Product Name',
+            render: (_, row) => row?.productName,
+        },
+        {
+            key: 'productDescription',
+            label: 'Description',
+            render: (_, row) => row?.productDescription,
+        },
+        {
+            key: 'status',
+            label: 'Status',
+            render: (_, row) =>
+                row.isApproved
+                    ? 'Approved'
+                    : row.isRejected
+                        ? 'Rejected'
+                        : 'Pending',
+        },
+        {
+            key: 'requestedBy',
+            label: 'Requested By',
+            render: (_, row) =>
+                `${row.requestedBy?.name} (${row.requestedBy?.email})`,
+        },
+        {
+            key: 'createdAt',
+            label: 'Created At',
+            render: (_, row) =>
+                row.createdAt
+                    ? new Date(row.createdAt).toLocaleString()
+                    : '-',
+        },
+        {
+            key: 'changes',
+            label: 'View Proposed Changes',
+            render: (_, row) => (
+                <Button
+                    size="small"
+                    variant="outlined"
+                    sx={{ textTransform: 'none' }}
+                    onClick={() => openViewChanges(row)}
+                >
+                    <VisibilityIcon />
+                </Button>
+            ),
+        },
+
+        {
+            key: 'actions',
+            label: 'Actions',
+            render: (_, row) =>
+                !(row.isApproved || row.isRejected) ? (
+                    <div style={{ display: 'flex', gap: 8 }}>
+                        <Button
+                            size="small"
+                            variant="contained"
+                            color="success"
+                            startIcon={<CheckCircleIcon />}
+                            sx={{ textTransform: 'none' }}
+                            onClick={() => openApproveModal(row)}
+                        >
+                            Approve
+                        </Button>
+                        <Button
+                            size="small"
+                            variant="contained"
+                            color="error"
+                            startIcon={<CancelIcon />}
+                            sx={{ textTransform: 'none' }}
+                            onClick={() => openRejectModal(row)}
+                        >
+                            Reject
+                        </Button>
+
+                        <Button
+                            size="small"
+                            variant="outlined"
+                            onClick={() => {
+                                setSelectedRow(row);
+                                setRemarkModalOpen(true);
                             }}
-            >
-                <Table>
-                    <TableHead sx={{background: '#F5F5FF'}}>
-                        <TableRow>
-                            {['Sno.', 'Product Id', 'Product Name', 'Description', 'Status', 'Requested by', 'Created At', 'Actions'].map((header) => (
-                                <TableCell key={header} sx={{fontSize: '14px', color: '#0000FF'}}>{header}</TableCell>
-                            ))}
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {loading ? (
-                            <TableRow><TableCell colSpan={6} align="center"><CircularProgress/></TableCell></TableRow>
-                        ) : editRequests.length === 0 ? (
-                            <TableRow><TableCell colSpan={6} align="center">No edit requests
-                                found.</TableCell></TableRow>
-                        ) : (
-                            editRequests.map((item, index) => (
-                                <TableRow key={item.id}>
-                                    <TableCell>{index + 1}</TableCell>
-                                    <TableCell>{item?.masterProduct?.productId}</TableCell>
-                                    <TableCell>{item.productName}</TableCell>
-                                    <TableCell>{item.productDescription}</TableCell>
-                                    <TableCell>
-                                        {item.isApproved
-                                            ? 'Approved'
-                                            : item.isRejected
-                                                ? 'Rejected'
-                                                : 'Pending'}
-                                    </TableCell>
+                        >
+                            Remark
+                        </Button>
+                    </div>
+                ) : (
+                    <span style={{ color: '#888' }}>No Action</span>
+                ),
+        },
+    ];
 
-                                    <TableCell>{item.productManager?.name}</TableCell>
-                                    <TableCell>{new Date(item.createdAt).toLocaleString()}</TableCell>
-                                    {/* <TableCell>
-                                        <IconButton
-                                            onClick={() => navigate(`/viewproducteditdetail/${item.id}`)}
-                                            color="primary"
-                                        >
-                                            <VisibilityIcon />
-                                        </IconButton>
-                                    </TableCell> */}
+    return (
+        <Paper elevation={2} sx={{ p: 3, borderRadius: 3 }}>
+            <ReusableTable
+                title="Product Edit Requests"
+                columns={columns}
+                data={editRequests}
+                loading={loading}
+                error={error}
+                showSearch={false}
+                showFilter={false}
+            />
 
-                                    <TableCell>
-                                        {!(item.isApproved || item.isRejected) ? (
-                                            <>
-                                                <Button
-                                                    size="small"
-                                                    variant="contained"
-                                                    color="success"
-                                                    onClick={() => openApproveModal(item)}
-                                                    sx={{mr: 1, textTransform: 'none'}}
-                                                >
-                                                    Approve
-                                                </Button>
-                                                <Button
-                                                    size="small"
-                                                    variant="outlined"
-                                                    color="error"
-                                                    onClick={() => openRejectModal(item)}
-                                                    sx={{textTransform: 'none'}}
-                                                >
-                                                    Reject
-                                                </Button>
-
-                                            </>
-                                        ) : (
-                                            <span style={{color: '#888'}}>No Action</span>
-                                        )}
-                                    </TableCell>
-
-                                </TableRow>
-                            ))
-                        )}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-
+            {/* APPROVE → Activate Modal */}
             {approveModal && (
                 <ActivateModal
-                    selectedUser={{name: selectedRequest.productName}}
+                    selectedUser={{
+                        name: selectedRequest?.masterProduct?.productName,
+                    }}
                     setActivateModal={setApproveModal}
-                    updateUserStatus={() => handleApprove()}
+                    updateUserStatus={handleApprove}
                 />
             )}
 
+            {/* REJECT → Delete Modal (Reason Required) */}
             {rejectModal && (
                 <DeleteModal
-                    selectedUser={{name: selectedRequest.productName}}
+                    selectedUser={{
+                        name: selectedRequest?.masterProduct?.productName,
+                    }}
                     setDeleteModal={setRejectModal}
-                    handleDelete={(reason) => handleReject(reason)}
+                    handleDelete={handleReject}
                 />
             )}
 
-        </>
+            {viewModal && (
+                <ChangesModal
+                    open={viewModal}
+                    onClose={() => setViewModal(false)}
+                    data={detailData}
+                    loading={detailLoading}
+                />
+            )}
+
+            {remarkModalOpen && (
+                <RemarkModal
+                    open={remarkModalOpen}
+                    onClose={() => setRemarkModalOpen(false)}
+                    requestId={selectedRow?.id}
+                />
+            )}
+
+
+        </Paper>
     );
 };
 

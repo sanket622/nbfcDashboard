@@ -15,7 +15,8 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import AssignRoleDialog from './AssignRoleDialog';
 import EditAssignRole from './EditAssignRole';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteAssociateSubAdmin, fetchAssociateSubAdmins, fetchModulesByRole, fetchRoles, updateAssociateSubAdmin, updateAssociateSubAdminStatus } from '../../../redux/managerole/roleModuleSlice';
+import { deleteAssociateSubAdmin, fetchAssociateSubAdmins, fetchModulesByRole, fetchRoles, resetAssignRoleState, updateAssociateSubAdmin, updateAssociateSubAdminStatus } from '../../../redux/managerole/roleModuleSlice';
+import ReusableTable from '../../../components/subcompotents/ReusableTable';
 import EditIcon from '@mui/icons-material/Edit';
 import ActivateModal from './ActivateModal';
 import DeactivateModal from './DeactivateModal';
@@ -78,7 +79,7 @@ const ManageRoles = () => {
     const { enqueueSnackbar } = useSnackbar();
 
     const dispatch = useDispatch();
-    const { associateSubAdmins, loading, error, totalCount, totalPages, roles, modules } = useSelector((state) => state.roleModule);
+    const { associateSubAdmins, loading, error, totalCount, totalPages, roles, modules, success } = useSelector((state) => state.roleModule);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -87,6 +88,12 @@ const ManageRoles = () => {
     useEffect(() => {
         dispatch(fetchAssociateSubAdmins(page, rowsPerPage));
     }, [dispatch, page, rowsPerPage]);
+
+    useEffect(() => {
+        if (success) {
+            dispatch(fetchAssociateSubAdmins(page, rowsPerPage));
+        }
+    }, [success, dispatch]);
 
     const openDeleteModal = (user) => {
         setSelectedUser(user);
@@ -137,9 +144,9 @@ const ManageRoles = () => {
             role: data.role.id,
             modules: data.module.map((m) => m.id),
         };
-         dispatch(updateAssociateSubAdmin(selectedEmployee.id, payload, enqueueSnackbar, () => {
+        dispatch(updateAssociateSubAdmin(selectedEmployee.id, payload, enqueueSnackbar, () => {
             setEditAssignRoleOpen(false)
-         }));
+        }));
     };
 
     const handleDelete = async () => {
@@ -183,204 +190,145 @@ const ManageRoles = () => {
 
     useEffect(() => {
         if (selectedRole?.id) {
-          dispatch(fetchModulesByRole(selectedRole.id));
+            dispatch(fetchModulesByRole(selectedRole.id));
         }
-      }, [selectedRole?.id, dispatch]);
+    }, [selectedRole?.id, dispatch]);
+
+    const columns = [
+        {
+            key: 'sno',
+            label: 'Sno.',
+            render: (_, __, index) =>
+                (page - 1) * rowsPerPage + index + 1,
+        },
+        {
+            key: 'name',
+            label: 'Name',
+        },
+        {
+            key: 'email',
+            label: 'Email',
+        },
+        {
+            key: 'mobile',
+            label: 'Phone Number',
+        },
+        {
+            key: 'status',
+            label: 'Status',
+            render: (_, row) => (
+                <button
+                    onClick={() =>
+                        row.isActive
+                            ? openDeactivateModal(row)
+                            : openActivateModal(row)
+                    }
+                    style={{
+                        background: row.isActive ? '#5577FD' : '#22C900',
+                        color: 'white',
+                        padding: '4px 8px',
+                        fontSize: '12px',
+                        borderRadius: '4px',
+                    }}
+                >
+                    {row.isActive ? 'Deactivate' : 'Activate'}
+                </button>
+            ),
+        },
+        {
+            key: 'edit',
+            label: 'Edit',
+            render: (_, row) => (
+                <IconButton
+                    sx={{ color: '#0000FF', padding: '6px' }}
+                    onClick={() => {
+                        setSelectedEmployee(row);
+                        reset({
+                            userName: row.name || '',
+                            role: row.role
+                                ? { id: row.role.id, label: row.role.roleName }
+                                : null,
+                            module:
+                                row.modules?.map((m) => ({
+                                    id: m.id,
+                                    label: m.moduleName,
+                                })) || [],
+                            mobile: row.mobile || '',
+                        });
+                        setEditAssignRoleOpen(true);
+                    }}
+                >
+                    <EditIcon />
+                </IconButton>
+            ),
+        },
+        {
+            key: 'delete',
+            label: 'Delete',
+            render: (_, row) => (
+                <IconButton
+                    color="error"
+                    size="small"
+                    onClick={() => openDeleteModal(row)}
+                >
+                    <Delete />
+                </IconButton>
+            ),
+        },
+    ];
+    const headerActions = (
+        <Button
+            startIcon={<PersonAddIcon />}
+            onClick={() => {
+                console.log('Add Roles clicked');
+                dispatch(resetAssignRoleState());
+                setAssignRoleOpen(true);
+            }}
+            sx={{
+                background: '#0000FF',
+                color: 'white',
+                px: 3,
+                py: 1,
+                borderRadius: 2,
+                fontSize: '14px',
+                fontWeight: 500,
+                textTransform: 'none',
+                '&:hover': { background: '#0000FF' },
+            }}
+        >
+            Add Roles
+        </Button>
+    );
+
 
     return (
-        <>
-            <div className="p-4">
-                <h1 className="text-[24px] font-semibold mb-4">Manage Roles</h1>
-                <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100">
-                    <div className="p-4 flex justify-between items-center">
-                        <div className="relative">
-                        </div>
-                        <div className="mb-4 flex gap-4">
-                            <Button
-                                startIcon={<PersonAddIcon />}
-                                onClick={() => setAssignRoleOpen(true)}
-                                variant="contained"
-                                sx={{
-                                    background: '#0000FF',
-                                    color: 'white',
-                                    px: 4,
-                                    py: 1,
-                                    borderRadius: 2,
-                                    fontSize: '16px',
-                                    fontWeight: 500,
-                                    textTransform: 'none',
-                                    '&:hover': { background: '#0000FF' },
-                                }}
-                            >
-                                Add Roles
-                            </Button>
-                        </div>
-                    </div>
-                    <TableContainer
-                        component={Paper}
-                        sx={{
-                            overflowX: 'auto',
-                            borderRadius: 2,
-                            '&::-webkit-scrollbar': { height: '8px' },
-                            '&::-webkit-scrollbar-thumb': { backgroundColor: '#0000FF', borderRadius: '4px' },
-                            '&::-webkit-scrollbar-track': { backgroundColor: '#f1f1f1' },
-                        }}
-                    >
-                        <Table>
-                            <TableHead sx={{ background: '#F5F5FF' }}>
-                                <TableRow>
-                                    {[
-                                        'Sno.',
-                                        'Name',
-                                        'Email',
-                                        'Phone Number',
-                                        'Status',
-                                        'Edit',
-                                        'Delete',
-                                    ].map((header) => (
-                                        <TableCell key={header} sx={{ fontSize: '14px', color: '#0000FF' }}>
-                                            {header}
-                                        </TableCell>
-                                    ))}
 
-                                </TableRow>
-                            </TableHead>
+        <Paper elevation={2} sx={{ p: 3, borderRadius: 3 }}>
+            <ReusableTable
+                title="Manage Roles"
+                headerActions={headerActions}
+                columns={columns}
+                data={associateSubAdmins}
+                loading={loading}
+                error={error}
+                page={page}
+                rowsPerPage={rowsPerPage}
+                totalPages={totalPages}
+                totalCount={totalCount}
+                onPageChange={handleChangePage}
+            />
 
-                            <TableBody>
-                                {loading ? (
-                                    <TableRow>
-                                        <TableCell colSpan={9} align="center">
-                                            <CircularProgress />
-                                        </TableCell>
-                                    </TableRow>
-                                
-                                   
-                                ) : !Array.isArray(associateSubAdmins) || associateSubAdmins.length === 0 ? (
-                                    <TableRow>
-                                        <TableCell colSpan={9} align="center">
-                                            No sub-admins found.
-                                        </TableCell>
-                                    </TableRow>
-                                ) : (
-                                    associateSubAdmins.map((emp, index) => (
-                                        <TableRow key={emp.id}>
-                                            <TableCell>{(page - 1) * rowsPerPage + index + 1}</TableCell>
-                                            <TableCell>{emp.name}</TableCell>
-                                            <TableCell>{emp.email}</TableCell>
-                                            <TableCell>{emp.mobile}</TableCell>
-                                            <TableCell>
-                                                <button
-                                                    onClick={() =>
-                                                        emp.isActive
-                                                            ? openDeactivateModal(emp)
-                                                            : openActivateModal(emp)
-                                                    }
-                                                    style={{
-                                                        background: emp.isActive ? '#5577FD' : '#22C900',
-                                                        color: 'white',
-                                                        padding: '4px 8px',
-                                                        fontSize: '12px',
-                                                        borderRadius: '4px',
-                                                        marginLeft: 8,
-                                                    }}
-                                                >
-                                                    {emp.isActive ? 'Deactivate' : 'Activate'}
-                                                </button>
-                                            </TableCell>
-                                            <TableCell>
-                                                <IconButton
-                                                    style={{ color: '#0000FF', padding: '6px' }}
-                                                    onClick={() => {
-                                                        setSelectedEmployee(emp);
-                                                        reset({
-                                                            userName: emp.name || '',
-                                                            role: emp.role ? { id: emp.role.id, label: emp.role.roleName } : null,
-                                                            module: emp.modules?.map((m) => ({ id: m.id, label: m.moduleName })) || [],
-                                                            mobile: emp.mobile || '',
-                                                        });
-                                                        setEditAssignRoleOpen(true);
-                                                    }}
-
-
-                                                >
-                                                    <EditIcon />
-                                                </IconButton>
-                                            </TableCell>
-                                            <TableCell>
-                                                <IconButton
-                                                    variant="outlined"
-                                                    color="error"
-                                                    size="small"
-                                                    onClick={() => openDeleteModal(emp)}
-                                                >
-                                                    <Delete />
-                                                </IconButton>
-                                            </TableCell>
-                                        </TableRow>
-                                    ))
-                                )}
-                            </TableBody>
-
-
-                        </Table>
-                    </TableContainer>
-
-                    <div className="px-6 py-4 flex justify-between items-center bg-white">
-                        <div className="flex items-center text-gray-500">
-                            <span className="mr-2 text-sm">Rows per page:</span>
-                            <select
-                                value={rowsPerPage}
-                                onChange={(e) => {
-                                    setRowsPerPage(Number(e.target.value));
-                                    setPage(1); // Reset page on rows per page change
-                                }}
-                                className="border border-gray-300 rounded px-2 py-1 text-sm"
-                            >
-                                {[5, 10, 25, 50].map((size) => (
-                                    <option key={size} value={size}>
-                                        {size}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                        <div className="text-sm text-gray-500">
-                            Showing {(page - 1) * rowsPerPage + 1} to{' '}
-                            {Math.min(page * rowsPerPage, totalCount)} out of {totalCount} records
-                        </div>
-                        <div className="flex items-center space-x-2">
-                            <Pagination
-                                count={totalPages}
-                                page={page}
-                                onChange={handleChangePage}
-                                size="small"
-                                shape="rounded"
-                                variant="outlined"
-                                renderItem={(item) => (
-                                    <PaginationItem
-                                        components={{ previous: ChevronLeftIcon, next: ChevronRightIcon }}
-                                        {...item}
-                                        sx={{
-                                            minWidth: 32,
-                                            height: 32,
-                                            borderRadius: '8px',
-                                            fontSize: '0.75rem',
-                                            px: 0,
-                                            color: item.selected ? '#0000FF' : 'black',
-                                            borderColor: item.selected ? '#0000FF' : 'transparent',
-                                            '&:hover': { borderColor: '#0000FF', backgroundColor: 'transparent' },
-                                            fontWeight: item.selected ? 600 : 400,
-                                        }}
-                                    />
-                                )}
-                            />
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             {assignRoleOpen && (
-                <AssignRoleDialog open={assignRoleOpen} onClose={() => setAssignRoleOpen(false)} />
+                <AssignRoleDialog
+                    open={assignRoleOpen}
+                    onClose={() => setAssignRoleOpen(false)}
+                    onSuccess={() => {
+                        dispatch(fetchAssociateSubAdmins(page, rowsPerPage));
+                    }}
+                />
             )}
+
 
             {editAssignRoleOpen && (
                 <EditAssignRole
@@ -420,7 +368,9 @@ const ManageRoles = () => {
                     open={deleteModal}
                 />
             )}
-        </>
+        </Paper>
+
+
     );
 };
 
