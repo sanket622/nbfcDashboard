@@ -11,8 +11,7 @@ const initialState = {
     paymentCycles: [],
     loading: false,
     error: null,
-    success: false,
-    error: null,     
+    success: false,    
     errors: {},  
 };
 
