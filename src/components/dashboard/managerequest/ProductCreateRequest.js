@@ -8,7 +8,9 @@ import {
     Typography,
     Divider,
     Button,
-    Paper
+    Paper,
+    Box,
+    Chip
 } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -189,57 +191,89 @@ const ProductCreateRequest = () => {
                 maxWidth="md"
                 fullWidth
             >
-                <DialogTitle>Product Create Request Details</DialogTitle>
+                <DialogTitle sx={{ bgcolor: 'success.main', color: 'white', fontWeight: 600 }}>
+                    Product Create Request Details
+                </DialogTitle>
 
-                <DialogContent dividers>
+                <DialogContent dividers sx={{ bgcolor: '#fafafa', p: 3 }}>
                     {detailsLoading ? (
-                        <CircularProgress />
+                        <Box display="flex" justifyContent="center" p={5}>
+                            <CircularProgress />
+                        </Box>
                     ) : (
                         requestDetails && (
-                            <Grid container spacing={2}>
-                                <Grid item xs={6}>
-                                    <Typography><b>Product Name:</b> {requestDetails.productName}</Typography>
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <Typography><b>Product Code:</b> {requestDetails.productCode}</Typography>
-                                </Grid>
+                            <>
+                                <Paper elevation={1} sx={{ p: 3, mb: 3, borderRadius: 2 }}>
+                                    <Typography variant="h6" fontWeight={600} color="success" mb={2}>
+                                        Product Information
+                                    </Typography>
+                                    <Divider sx={{ mb: 2 }} />
+                                    <Grid container spacing={2}>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Product ID</Typography>
+                                            <Typography fontWeight={500}>{requestDetails.productId}</Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Product Name</Typography>
+                                            <Typography fontWeight={500}>{requestDetails.productName}</Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Product Code</Typography>
+                                            <Typography fontWeight={500}>{requestDetails.productCode}</Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Version</Typography>
+                                            <Typography fontWeight={500}>{requestDetails.versionId}</Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Status</Typography>
+                                            <Chip label={requestDetails.status} color="primary" size="small" />
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <Typography variant="body2" color="text.secondary">Description</Typography>
+                                            <Typography fontWeight={500}>{requestDetails.productDescription}</Typography>
+                                        </Grid>
+                                    </Grid>
+                                </Paper>
 
-                                <Grid item xs={6}>
-                                    <Typography><b>Product ID:</b> {requestDetails.productId}</Typography>
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <Typography><b>Status:</b> {requestDetails.status}</Typography>
-                                </Grid>
+                                <Paper elevation={1} sx={{ p: 3, mb: 3, borderRadius: 2 }}>
+                                    <Typography variant="h6" fontWeight={600} color="primary" mb={2}>
+                                        Category & Type
+                                    </Typography>
+                                    <Divider sx={{ mb: 2 }} />
+                                    <Grid container spacing={2}>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Category</Typography>
+                                            <Typography fontWeight={500}>{requestDetails.productCategory?.categoryName}</Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Loan Type</Typography>
+                                            <Typography fontWeight={500}>{requestDetails.loanType?.name}</Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Partner</Typography>
+                                            <Typography fontWeight={500}>{requestDetails.productPartner?.name}</Typography>
+                                        </Grid>
+                                    </Grid>
+                                </Paper>
 
-                                <Grid item xs={6}>
-                                    <Typography><b>Category:</b> {requestDetails.productCategory?.categoryName}</Typography>
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <Typography><b>Loan Type:</b> {requestDetails.loanType?.name}</Typography>
-                                </Grid>
-
-                                <Grid item xs={6}>
-                                    <Typography><b>Partner:</b> {requestDetails.productPartner?.name}</Typography>
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <Typography><b>Version:</b> {requestDetails.versionId}</Typography>
-                                </Grid>
-
-                                <Grid item xs={12}>
-                                    <Typography><b>Description:</b> {requestDetails.productDescription}</Typography>
-                                </Grid>
-
-                                <Grid item xs={12}>
-                                    <Divider />
-                                </Grid>
-
-                                <Grid item xs={6}>
-                                    <Typography><b>Created At:</b> {new Date(requestDetails.createdAt).toLocaleString()}</Typography>
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <Typography><b>Updated At:</b> {new Date(requestDetails.updatedAt).toLocaleString()}</Typography>
-                                </Grid>
-                            </Grid>
+                                <Paper elevation={1} sx={{ p: 3, borderRadius: 2 }}>
+                                    <Typography variant="h6" fontWeight={600} color="primary" mb={2}>
+                                        Timestamps
+                                    </Typography>
+                                    <Divider sx={{ mb: 2 }} />
+                                    <Grid container spacing={2}>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Created At</Typography>
+                                            <Typography fontWeight={500}>{new Date(requestDetails.createdAt).toLocaleString()}</Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Updated At</Typography>
+                                            <Typography fontWeight={500}>{new Date(requestDetails.updatedAt).toLocaleString()}</Typography>
+                                        </Grid>
+                                    </Grid>
+                                </Paper>
+                            </>
                         )
                     )}
                 </DialogContent>

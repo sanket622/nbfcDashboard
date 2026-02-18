@@ -256,28 +256,8 @@ const ProductDeleteRequest = () => {
                                     <Divider sx={{ mb: 2 }} />
                                     <Grid container spacing={2}>
                                         <Grid item xs={6}>
-                                            <Typography variant="body2" color="text.secondary">Request ID</Typography>
-                                            <Typography fontWeight={500}>{requestDetails.id}</Typography>
-                                        </Grid>
-                                        <Grid item xs={6}>
                                             <Typography variant="body2" color="text.secondary">Request Status</Typography>
                                             <Chip label={requestDetails.status} color={requestDetails.status === 'PENDING' ? 'warning' : requestDetails.status === 'APPROVED' ? 'success' : 'error'} size="small" />
-                                        </Grid>
-                                        <Grid item xs={6}>
-                                            <Typography variant="body2" color="text.secondary">Master Product ID</Typography>
-                                            <Typography fontWeight={500}>{requestDetails.masterProductId}</Typography>
-                                        </Grid>
-                                        <Grid item xs={6}>
-                                            <Typography variant="body2" color="text.secondary">Requested By ID</Typography>
-                                            <Typography fontWeight={500}>{requestDetails.requestedById}</Typography>
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <Typography variant="body2" color="text.secondary">Delete Reason</Typography>
-                                            <Typography fontWeight={500} sx={{ bgcolor: '#fff3cd', p: 1.5, borderRadius: 1, mt: 0.5 }}>{requestDetails.reason}</Typography>
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <Typography variant="body2" color="text.secondary">Request Rejection Reason</Typography>
-                                            <Typography fontWeight={500}>{requestDetails?.rejectionReason || 'N/A'}</Typography>
                                         </Grid>
                                         <Grid item xs={6}>
                                             <Typography variant="body2" color="text.secondary">Created At</Typography>
@@ -287,9 +267,13 @@ const ProductDeleteRequest = () => {
                                             <Typography variant="body2" color="text.secondary">Updated At</Typography>
                                             <Typography fontWeight={500}>{new Date(requestDetails.updatedAt).toLocaleString()}</Typography>
                                         </Grid>
-                                        <Grid item xs={6}>
-                                            <Typography variant="body2" color="text.secondary">Request Deleted</Typography>
-                                            <Typography fontWeight={500}>{requestDetails.isDeleted ? 'Yes' : 'No'}</Typography>
+                                        <Grid item xs={12}>
+                                            <Typography variant="body2" color="text.secondary">Delete Reason</Typography>
+                                            <Typography fontWeight={500} sx={{ bgcolor: '#fff3cd', p: 1.5, borderRadius: 1, mt: 0.5 }}>{requestDetails.reason}</Typography>
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <Typography variant="body2" color="text.secondary">Request Rejection Reason</Typography>
+                                            <Typography fontWeight={500}>{requestDetails?.rejectionReason || 'N/A'}</Typography>
                                         </Grid>
                                     </Grid>
                                 </Paper>
@@ -316,10 +300,6 @@ const ProductDeleteRequest = () => {
                                             <Typography variant="body2" color="text.secondary">Version</Typography>
                                             <Typography fontWeight={500}>{requestDetails.masterProduct?.versionId}</Typography>
                                         </Grid>
-                                        <Grid item xs={6}>
-                                            <Typography variant="body2" color="text.secondary">Product Manager ID</Typography>
-                                            <Typography fontWeight={500}>{requestDetails.masterProduct?.productManagerId}</Typography>
-                                        </Grid>
                                         <Grid item xs={12}>
                                             <Typography variant="body2" color="text.secondary">Description</Typography>
                                             <Typography fontWeight={500}>{requestDetails.masterProduct?.productDescription}</Typography>
@@ -340,10 +320,6 @@ const ProductDeleteRequest = () => {
                                             <Typography variant="body2" color="text.secondary">Product Updated At</Typography>
                                             <Typography fontWeight={500}>{new Date(requestDetails.masterProduct?.updatedAt).toLocaleString()}</Typography>
                                         </Grid>
-                                        <Grid item xs={6}>
-                                            <Typography variant="body2" color="text.secondary">Product Deleted</Typography>
-                                            <Typography fontWeight={500}>{requestDetails.masterProduct?.isDeleted ? 'Yes' : 'No'}</Typography>
-                                        </Grid>
                                     </Grid>
                                 </Paper>
 
@@ -358,24 +334,12 @@ const ProductDeleteRequest = () => {
                                             <Typography fontWeight={500}>{requestDetails.masterProduct?.productCategory?.categoryName}</Typography>
                                         </Grid>
                                         <Grid item xs={6}>
-                                            <Typography variant="body2" color="text.secondary">Category ID</Typography>
-                                            <Typography fontWeight={500}>{requestDetails.masterProduct?.productCategoryId}</Typography>
-                                        </Grid>
-                                        <Grid item xs={6}>
                                             <Typography variant="body2" color="text.secondary">Loan Type</Typography>
                                             <Typography fontWeight={500}>{requestDetails.masterProduct?.loanType?.name}</Typography>
                                         </Grid>
                                         <Grid item xs={6}>
-                                            <Typography variant="body2" color="text.secondary">Loan Type ID</Typography>
-                                            <Typography fontWeight={500}>{requestDetails.masterProduct?.loanTypeId}</Typography>
-                                        </Grid>
-                                        <Grid item xs={6}>
                                             <Typography variant="body2" color="text.secondary">Partner</Typography>
                                             <Typography fontWeight={500}>{requestDetails.masterProduct?.productPartner?.name}</Typography>
-                                        </Grid>
-                                        <Grid item xs={6}>
-                                            <Typography variant="body2" color="text.secondary">Partner ID</Typography>
-                                            <Typography fontWeight={500}>{requestDetails.masterProduct?.partnerId}</Typography>
                                         </Grid>
                                         <Grid item xs={6}>
                                             <Typography variant="body2" color="text.secondary">Variants Count</Typography>
