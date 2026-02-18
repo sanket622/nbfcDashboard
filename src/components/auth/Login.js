@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../../redux/auth/authSlice";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import logo from '../../assets/earnlogo.png';
+import logo from '../../assets/AppIcons.svg';
 import backgroundimg from './1.png';
 import { Button, IconButton, InputAdornment } from "@mui/material";
 import { useSnackbar } from 'notistack';
@@ -161,7 +161,7 @@ const Login = () => {
                 variant="contained"
                 disabled={auth.loading}
                 sx={{
-                  background: "#0000FF",
+                  background: "#1f2937",
                   color: "white",
                   px: 12,
                   py: 1,
@@ -169,7 +169,7 @@ const Login = () => {
                   fontSize: "16px",
                   fontWeight: 500,
                   textTransform: "none",
-                  "&:hover": { background: "#0000FF" },
+                  "&:hover": { background: "#1f2937" },
                 }}
               >
                 {auth.loading ? "Logging In..." : "Log In"}

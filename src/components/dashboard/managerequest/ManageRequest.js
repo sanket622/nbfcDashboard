@@ -22,7 +22,7 @@ const ManageRequest = () => {
                 <Box sx={{width: '100%'}}>
                     <Tabs value={tabIndex} onChange={handleTabChange} indicatorColor="primary" variant="scrollable"
                           scrollButtons="auto" textColor="inherit" sx={{ backgroundColor: '#F5F5FF',
-                        '& .MuiTabs-indicator': {backgroundColor: '#0000FF'},
+                        '& .MuiTabs-indicator': {backgroundColor: '#1f2937'},
                         '& .MuiTab-root': {
                             color: '#424242',
                             textTransform: 'capitalize',
@@ -30,7 +30,7 @@ const ManageRequest = () => {
                             lineHeight: 1.2,
                             minHeight: 'auto',
                         },
-                        '& .Mui-selected': {color: '#0000FF'}
+                        '& .Mui-selected': {color: '#1f2937'}
                     }}>
                         <Tab label="Product Create Request"/>
                         <Tab label="Product Edit Request"/>

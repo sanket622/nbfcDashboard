@@ -240,7 +240,7 @@ const ManageRoles = () => {
             label: 'Edit',
             render: (_, row) => (
                 <IconButton
-                    sx={{ color: '#0000FF', padding: '6px' }}
+                    sx={{ color: '#1f2937', padding: '6px' }}
                     onClick={() => {
                         setSelectedEmployee(row);
                         reset({
@@ -285,7 +285,7 @@ const ManageRoles = () => {
                 setAssignRoleOpen(true);
             }}
             sx={{
-                background: '#0000FF',
+                background: '#1f2937',
                 color: 'white',
                 px: 3,
                 py: 1,
@@ -293,7 +293,7 @@ const ManageRoles = () => {
                 fontSize: '14px',
                 fontWeight: 500,
                 textTransform: 'none',
-                '&:hover': { background: '#0000FF' },
+                '&:hover': { background: '#1f2937' },
             }}
         >
             Add Roles

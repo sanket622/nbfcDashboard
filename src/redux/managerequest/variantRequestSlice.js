@@ -96,8 +96,8 @@ export const rejectEditRequest = (id, reason, enqueueSnackbar) => async (dispatc
     try {
         const token = localStorage.getItem('accessToken');
         await api.patch(
-            '/associate/variantProductUpdateRequest/rejectVariantProductUpdateRequest',
-            { requestId: id, reason },
+            `/associate/variantProductUpdateRequest/rejectVariantProductUpdateRequest/${id}`,
+            { rejectionReason : reason },
             { headers: { Authorization: `Bearer ${token}` } }
         );
         enqueueSnackbar('Edit request rejected.', { variant: 'success' });
@@ -115,7 +115,7 @@ export const handleDeleteRequest = (id, action, reason = '', enqueueSnackbar) =>
         const token = localStorage.getItem('accessToken');
         const res = await api.patch(
             `associate/variantProductDeleteRequest/handleVariantProductDeleteRequest/${id}`,
-            { action, reason },
+            { action, rejectionReason: reason },
             { headers: { Authorization: `Bearer ${token}` } }
         );
         enqueueSnackbar(

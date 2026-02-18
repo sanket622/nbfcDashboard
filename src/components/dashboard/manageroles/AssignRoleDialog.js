@@ -104,7 +104,7 @@ const AssignRoleDialog = ({ onClose, open, onSuccess }) => {
                 <div className="mx-auto bg-white rounded-lg shadow-sm">
                     <div className="flex items-center p-4 border-b border-gray-100 bg-[#F9F9FF]">
                         <IconButton onClick={() => onClose(false)} size="small">
-                            <ArrowBack className="text-[#0000FF]" />
+                            <ArrowBack className="text-[#1f2937]" />
                         </IconButton>
                         <h1 className="text-lg font-medium text-gray-900 ml-2">Assign Role</h1>
                     </div>
@@ -215,7 +215,7 @@ const AssignRoleDialog = ({ onClose, open, onSuccess }) => {
                                             endAdornment: (
                                                 <InputAdornment position="end">
                                                     <IconButton onClick={() => setShowPassword((s) => !s)} size="small">
-                                                        {showPassword ? <VisibilityOff className="text-[#0000FF]" /> : <Visibility className="text-[#0000FF]" />}
+                                                        {showPassword ? <VisibilityOff className="text-[#1f2937]" /> : <Visibility className="text-[#1f2937]" />}
                                                     </IconButton>
                                                 </InputAdornment>
                                             ),
@@ -242,7 +242,7 @@ const AssignRoleDialog = ({ onClose, open, onSuccess }) => {
                                             endAdornment: (
                                                 <InputAdornment position="end">
                                                     <IconButton onClick={() => setShowConfirmPassword((s) => !s)} size="small">
-                                                        {showConfirmPassword ? <VisibilityOff className="text-[#0000FF]" /> : <Visibility className="text-[#0000FF]" />}
+                                                        {showConfirmPassword ? <VisibilityOff className="text-[#1f2937]" /> : <Visibility className="text-[#1f2937]" />}
                                                     </IconButton>
                                                 </InputAdornment>
                                             ),
@@ -260,7 +260,7 @@ const AssignRoleDialog = ({ onClose, open, onSuccess }) => {
                             startIcon={<PersonAddIcon />}
                             fullWidth
                             sx={{
-                                background: '#0000FF',
+                                background: '#1f2937',
                                 color: 'white',
                                 px: 4,
                                 py: 1,
@@ -268,7 +268,7 @@ const AssignRoleDialog = ({ onClose, open, onSuccess }) => {
                                 fontSize: '16px',
                                 fontWeight: 500,
                                 textTransform: 'none',
-                                '&:hover': { background: '#0000FF' },
+                                '&:hover': { background: '#1f2937' },
                             }}
                         >
                             Assign Role

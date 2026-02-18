@@ -45,7 +45,7 @@ export default function Dashboard() {
                                     className="w-full h-full object-cover"
                                 />
                             </div>
-                            <h2 className="text-[#0000FF] text-[18px] font-semibold mb-2">Hello!</h2>
+                            <h2 className="text-[#1f2937] text-[18px] font-semibold mb-2">Hello!</h2>
                             <p className="text-[#8A8A8A] text-[12px]">Good Morning! You have new messages. It's a lot of work today! So let's get started.</p>
                         </div>
                     </div>
@@ -123,14 +123,14 @@ export default function Dashboard() {
                             <CardContent>
                                 <div className="flex justify-between items-center mb-2">
                                     <h3 className="font-semibold">What’s New</h3>
-                                    <span className="text-[14px] text-[#0000FF] flex items-center gap-1 cursor-pointer">
+                                    <span className="text-[14px] text-[#1f2937] flex items-center gap-1 cursor-pointer">
                                         View all <ArrowForwardIos fontSize="inherit" />
                                     </span>
                                 </div>
                                 {[1, 2].map((item) => (
                                     <div key={item} className="mb-4">
                                         <div className="bg-gray-200 h-16 rounded mb-2"></div>
-                                        <p className="text-[14px] text-[#0000FF] font-medium">
+                                        <p className="text-[14px] text-[#1f2937] font-medium">
                                             New Feature Update <span className="text-gray-400 ml-2 text-[14px]">• 3 hours ago</span>
                                         </p>
                                         <p className="text-[14px] text-black mt-1">

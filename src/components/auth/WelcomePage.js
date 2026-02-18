@@ -17,7 +17,7 @@ export default function WelcomePage() {
                   }}      
             >
                 <div className="max-w-full md:ml-40">
-                    <h1 className="text-[#0000FF] text-2xl md:text-[40px] font-semibold text-center">
+                    <h1 className="text-[#1f2937] text-2xl md:text-[40px] font-semibold text-center">
                         Welcome, User! Let's Get Started
                     </h1>
                     <p className="mt-10 text-xl text-center text-black">
@@ -33,7 +33,7 @@ export default function WelcomePage() {
                             variant="contained"
                             fullWidth={false}
                             sx={{
-                                background: '#0000FF',
+                                background: '#1f2937',
                                 color: 'white',
                                 px: 12,
                                 py: 1.5,
@@ -42,7 +42,7 @@ export default function WelcomePage() {
                                 fontWeight: 500,
                                 textTransform: 'none',
                                 '&:hover': {
-                                    background: '#0000FF',
+                                    background: '#1f2937',
                                 },
                             }}
                         >

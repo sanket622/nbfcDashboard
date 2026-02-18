@@ -109,7 +109,7 @@ const ReusableTable = ({
                                 <TableCell
                                     key={col.key}
                                     align={col.align || 'left'}
-                                    sx={{ fontSize: '14px', color: '#0000FF' }}
+                                    sx={{ fontSize: '14px' }}
                                 >
                                     {col.label}
                                 </TableCell>

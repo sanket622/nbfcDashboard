@@ -52,17 +52,13 @@ const DashboardLayout = () => {
       >
         <ul className="space-y-3 mt-6">
           {TABS.map((item) => {
-            const isActive = location.pathname.includes(item.path);
             return (
               <li
                 key={item.path}
                 onClick={() => navigate(`/${item.path}`)}
-                className={`relative flex items-center px-5 py-2.5 cursor-pointer gap-3 transition-all ${isActive
-                  ? 'bg-[#0000FF] font-medium rounded-md text-white'
-                  : 'hover:bg-[#0000FF]/10 hover:text-[#0000FF] text-[#5B5B5B] rounded-xl'
-                  }`}
+                className="relative flex items-center px-5 py-2.5 cursor-pointer gap-3 transition-all hover:bg-[#1f2937]/10 hover:text-[#1f2937] text-[#5B5B5B] rounded-xl"
               >
-                <span>{isActive ? item.icon : item.outlinedIcon}</span>
+                <span>{item.outlinedIcon}</span>
                 <span>{item.label}</span>
               </li>
             );

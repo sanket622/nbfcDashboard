@@ -117,13 +117,13 @@ export const rejectEditRequest = (id, rejectionReason, enqueueSnackbar) => async
 };
 
 // Handle Delete Request
-export const handleDeleteRequest = (requestId, action, reason = '', enqueueSnackbar) => async (dispatch) => {
+export const handleDeleteRequest = (requestId, action, reason, enqueueSnackbar) => async (dispatch) => {
     dispatch(fetchStart());
     try {
         const token = localStorage.getItem('accessToken');
         const res = await axios.patch(
             `${process.env.REACT_APP_BACKEND_URL}/associate/masterProductDeleteRequest/handleMasterProductDeleteRequest`,
-            { requestId, action, reason },
+            { requestId, action, rejectionReason: reason },
             { headers: { Authorization: `Bearer ${token}` } }
         );
         enqueueSnackbar(

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import logo from '../assets/earnlogo.png';
+import logo from '../assets/AppIcons.svg';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { Avatar, IconButton } from '@mui/material';
@@ -122,7 +122,7 @@ function Navbar() {
               {/*</span>*/}
 
               {/* Dropdown Arrow */}
-              <ArrowDropDownIcon className="text-[#0000FF] h-8 w-8" />
+              <ArrowDropDownIcon className="text-gray-700 h-8 w-8" />
             </div>
 
             {menuOpen && (

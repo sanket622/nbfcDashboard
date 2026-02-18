@@ -1,7 +1,7 @@
 import React, {  useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import logo from '../../assets/earnlogo.png'
+import logo from '../../assets/AppIcons.svg'
 import { Button, IconButton, InputAdornment, TextField } from '@mui/material';
 import backgroundimg from '../../assets/1.png'
 
@@ -102,7 +102,7 @@ const NewPassword = () => {
         <div className="w-full h-screen flex items-center justify-end px-4   ">
             {/* Right side for Login Form */}
             <div className="w-[631px] h-[682px] md:px-10 md:mr-10 bg-white bg-opacity-25 backdrop-blur-[34px] p-5 rounded-2xl shadow-lg flex justify-center flex-col">
-                <h1 className="md:text-[32px] text-xl font-bold text-[#0000FF] text-center mb-4 ">Create Your Password</h1>
+                <h1 className="md:text-[32px] text-xl font-bold text-[#1f2937] text-center mb-4 ">Create Your Password</h1>
                 <p className="text-[20px] text-center">Set up your password to get started.</p>
 
                 <form className="grid grid-cols-1 gap-4 mt-10" >
@@ -171,7 +171,7 @@ const NewPassword = () => {
                             fullWidth={false}
 
                             sx={{
-                                background: '#0000FF',
+                                background: '#1f2937',
                                 color: 'white',
                                 px: 12,
                                 py: 1.5,
@@ -180,7 +180,7 @@ const NewPassword = () => {
                                 fontWeight: 500,
                                 textTransform: 'none',
                                 '&:hover': {
-                                    background: '#0000FF',
+                                    background: '#1f2937',
                                 },
                             }}
                         >
@@ -198,7 +198,7 @@ const NewPassword = () => {
 
                 <div className="flex items-center justify-center space-x-2 mt-10">
                     <p className=" text-[#838383] text-[14px]">Don’t have an account? </p>
-                    <button onClick={() => navigate("/contact")} className="text-[#0000FF] text-[14px] font-semibold">
+                    <button onClick={() => navigate("/contact")} className="text-[#1f2937] text-[14px] font-semibold">
                         Contact us 
                     </button>
                 </div>

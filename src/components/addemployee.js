@@ -103,7 +103,7 @@ const Add = () => {
           </FormControl>
           <Box className="flex justify-end col-span-1 md:col-span-2 mt-4 space-x-2">
             <Button variant="outlined">Cancel</Button>
-            <Button variant="contained" sx={{ backgroundColor: "#0000FF" }}>Next</Button>
+            <Button variant="contained" sx={{ backgroundColor: "#1f2937" }}>Next</Button>
           </Box>
         </form>
       )}
@@ -146,7 +146,7 @@ const Add = () => {
           </FormControl>
           <Box className="flex justify-end col-span-1 md:col-span-2 mt-4 space-x-2">
             <Button variant="outlined">Cancel</Button>
-            <Button variant="contained" sx={{ backgroundColor: "#0000FF" }}>Next</Button>
+            <Button variant="contained" sx={{ backgroundColor: "#1f2937" }}>Next</Button>
           </Box>
         </form>
       )}
@@ -160,7 +160,7 @@ const Add = () => {
           <TextField label="IFSC Code" fullWidth size="small" />
           <Box className="flex justify-end col-span-1 md:col-span-2 mt-4 space-x-2">
             <Button variant="outlined">Cancel</Button>
-            <Button variant="contained" sx={{ backgroundColor: "#0000FF" }}>Add</Button>
+            <Button variant="contained" sx={{ backgroundColor: "#1f2937" }}>Add</Button>
           </Box>
         </form>
       )}

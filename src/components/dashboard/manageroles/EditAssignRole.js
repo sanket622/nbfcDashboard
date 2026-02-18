@@ -17,7 +17,7 @@ const EditAssignRole = ({ open, onClose, control, errors, onSubmit, roles, modul
         <div className="mx-auto bg-white rounded-lg shadow-sm">
           <div className="flex items-center p-4 border-b border-gray-100 bg-[#F9F9FF]">
             <IconButton onClick={onClose} size="small">
-              <ArrowBack className="text-[#0000FF]" />
+              <ArrowBack className="text-[#1f2937]" />
             </IconButton>
             <h1 className="text-lg font-medium text-gray-900 ml-2">Edit Assign Role</h1>
           </div>
@@ -95,7 +95,7 @@ const EditAssignRole = ({ open, onClose, control, errors, onSubmit, roles, modul
               startIcon={<PersonAddIcon />}
               fullWidth
               sx={{
-                background: '#0000FF',
+                background: '#1f2937',
                 color: 'white',
                 px: 4,
                 py: 1,
@@ -103,7 +103,7 @@ const EditAssignRole = ({ open, onClose, control, errors, onSubmit, roles, modul
                 fontSize: '16px',
                 fontWeight: 500,
                 textTransform: 'none',
-                '&:hover': { background: '#0000FF' },
+                '&:hover': { background: '#1f2937' },
               }}
             >
               Update Role
