@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Dialog, DialogTitle, DialogContent, CircularProgress, Grid, Typography, Divider } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, CircularProgress, Grid, Typography, Divider, Box, Chip } from '@mui/material';
 import axios from 'axios';
 
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -237,80 +237,178 @@ const ProductDeleteRequest = () => {
                 maxWidth="md"
                 fullWidth
             >
-                <DialogTitle>Product Delete Request Details</DialogTitle>
+                <DialogTitle sx={{ bgcolor: 'error.main', color: 'white', fontWeight: 600 }}>
+                    Product Delete Request Details
+                </DialogTitle>
 
-                <DialogContent dividers>
+                <DialogContent dividers sx={{ bgcolor: '#fafafa', p: 3 }}>
                     {detailsLoading ? (
-                        <CircularProgress />
+                        <Box display="flex" justifyContent="center" p={5}>
+                            <CircularProgress />
+                        </Box>
                     ) : (
                         requestDetails && (
-                            <Grid container spacing={2}>
-                                <Grid item xs={6}>
-                                    <Typography><b>Product Name:</b> {requestDetails.masterProduct?.productName}</Typography>
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <Typography><b>Product Code:</b> {requestDetails.masterProduct?.productCode}</Typography>
-                                </Grid>
-
-                                <Grid item xs={6}>
-                                    <Typography><b>Category:</b> {requestDetails.masterProduct?.productCategory?.categoryName}</Typography>
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <Typography><b>Loan Type:</b> {requestDetails.masterProduct?.loanType?.name}</Typography>
-                                </Grid>
-
-                                <Grid item xs={6}>
-                                    <Typography><b>Product Partner:</b> {requestDetails.masterProduct?.productPartner?.name}</Typography>
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <Typography><b>Status:</b> {requestDetails.status}</Typography>
-                                </Grid>
-
-                                <Grid item xs={6}>
-                                    <Typography><b>Reason of Rejection:</b> {requestDetails?.rejectionReason || 'Not Available'}</Typography>
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <Typography><b>Product Code:</b> {requestDetails.masterProduct?.productCode}</Typography>
-                                </Grid>
-
-                                <Grid item xs={6}>
-                                    <Typography><b>Description:</b> {requestDetails.masterProduct?.productDescription}</Typography>
-                                </Grid>
-
-                                <Grid item xs={6}>
-                                    <Typography><b>Master Product Status:</b> {requestDetails.masterProduct?.status}</Typography>
-                                </Grid>
-
-                                <Grid item xs={6}>
-                                    <Typography><b>Delete Reason:</b> {requestDetails.reason}</Typography>
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <Divider />
-                                </Grid>
-
-                                <Grid item xs={6}>
-                                    <Typography>
-                                        <b>Requested By:</b> {requestDetails.requestedBy?.name}
+                            <>
+                                <Paper elevation={1} sx={{ p: 3, mb: 3, borderRadius: 2 }}>
+                                    <Typography variant="h6" fontWeight={600} color="error" mb={2}>
+                                        Request Information
                                     </Typography>
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <Typography>
-                                        <b>Email:</b> {requestDetails.requestedBy?.email}
-                                    </Typography>
-                                </Grid>
+                                    <Divider sx={{ mb: 2 }} />
+                                    <Grid container spacing={2}>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Request ID</Typography>
+                                            <Typography fontWeight={500}>{requestDetails.id}</Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Request Status</Typography>
+                                            <Chip label={requestDetails.status} color={requestDetails.status === 'PENDING' ? 'warning' : requestDetails.status === 'APPROVED' ? 'success' : 'error'} size="small" />
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Master Product ID</Typography>
+                                            <Typography fontWeight={500}>{requestDetails.masterProductId}</Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Requested By ID</Typography>
+                                            <Typography fontWeight={500}>{requestDetails.requestedById}</Typography>
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <Typography variant="body2" color="text.secondary">Delete Reason</Typography>
+                                            <Typography fontWeight={500} sx={{ bgcolor: '#fff3cd', p: 1.5, borderRadius: 1, mt: 0.5 }}>{requestDetails.reason}</Typography>
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <Typography variant="body2" color="text.secondary">Request Rejection Reason</Typography>
+                                            <Typography fontWeight={500}>{requestDetails?.rejectionReason || 'N/A'}</Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Created At</Typography>
+                                            <Typography fontWeight={500}>{new Date(requestDetails.createdAt).toLocaleString()}</Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Updated At</Typography>
+                                            <Typography fontWeight={500}>{new Date(requestDetails.updatedAt).toLocaleString()}</Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Request Deleted</Typography>
+                                            <Typography fontWeight={500}>{requestDetails.isDeleted ? 'Yes' : 'No'}</Typography>
+                                        </Grid>
+                                    </Grid>
+                                </Paper>
 
-                                <Grid item xs={6}>
-                                    <Typography>
-                                        <b>Mobile:</b> {requestDetails.requestedBy?.mobile}
+                                <Paper elevation={1} sx={{ p: 3, mb: 3, borderRadius: 2 }}>
+                                    <Typography variant="h6" fontWeight={600} color="primary" mb={2}>
+                                        Product Information
                                     </Typography>
-                                </Grid>
+                                    <Divider sx={{ mb: 2 }} />
+                                    <Grid container spacing={2}>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Product ID</Typography>
+                                            <Typography fontWeight={500}>{requestDetails.masterProduct?.productId}</Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Product Name</Typography>
+                                            <Typography fontWeight={500}>{requestDetails.masterProduct?.productName}</Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Product Code</Typography>
+                                            <Typography fontWeight={500}>{requestDetails.masterProduct?.productCode}</Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Version</Typography>
+                                            <Typography fontWeight={500}>{requestDetails.masterProduct?.versionId}</Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Product Manager ID</Typography>
+                                            <Typography fontWeight={500}>{requestDetails.masterProduct?.productManagerId}</Typography>
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <Typography variant="body2" color="text.secondary">Description</Typography>
+                                            <Typography fontWeight={500}>{requestDetails.masterProduct?.productDescription}</Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Product Status</Typography>
+                                            <Chip label={requestDetails.masterProduct?.status} color="primary" size="small" />
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Product Rejection Reason</Typography>
+                                            <Typography fontWeight={500}>{requestDetails.masterProduct?.rejectionReason || 'N/A'}</Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Product Created At</Typography>
+                                            <Typography fontWeight={500}>{new Date(requestDetails.masterProduct?.createdAt).toLocaleString()}</Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Product Updated At</Typography>
+                                            <Typography fontWeight={500}>{new Date(requestDetails.masterProduct?.updatedAt).toLocaleString()}</Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Product Deleted</Typography>
+                                            <Typography fontWeight={500}>{requestDetails.masterProduct?.isDeleted ? 'Yes' : 'No'}</Typography>
+                                        </Grid>
+                                    </Grid>
+                                </Paper>
 
-                                <Grid item xs={6}>
-                                    <Typography>
-                                        <b>Created At:</b> {new Date(requestDetails.createdAt).toLocaleString()}
+                                <Paper elevation={1} sx={{ p: 3, mb: 3, borderRadius: 2 }}>
+                                    <Typography variant="h6" fontWeight={600} color="primary" mb={2}>
+                                        Category & Type
                                     </Typography>
-                                </Grid>
-                            </Grid>
+                                    <Divider sx={{ mb: 2 }} />
+                                    <Grid container spacing={2}>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Category</Typography>
+                                            <Typography fontWeight={500}>{requestDetails.masterProduct?.productCategory?.categoryName}</Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Category ID</Typography>
+                                            <Typography fontWeight={500}>{requestDetails.masterProduct?.productCategoryId}</Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Loan Type</Typography>
+                                            <Typography fontWeight={500}>{requestDetails.masterProduct?.loanType?.name}</Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Loan Type ID</Typography>
+                                            <Typography fontWeight={500}>{requestDetails.masterProduct?.loanTypeId}</Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Partner</Typography>
+                                            <Typography fontWeight={500}>{requestDetails.masterProduct?.productPartner?.name}</Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Partner ID</Typography>
+                                            <Typography fontWeight={500}>{requestDetails.masterProduct?.partnerId}</Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Variants Count</Typography>
+                                            <Typography fontWeight={500}>{requestDetails.masterProduct?._count?.VariantProduct || 0}</Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Loan Applications</Typography>
+                                            <Typography fontWeight={500}>{requestDetails.masterProduct?._count?.LoanApplication || 0}</Typography>
+                                        </Grid>
+                                    </Grid>
+                                </Paper>
+
+                                <Paper elevation={1} sx={{ p: 3, borderRadius: 2 }}>
+                                    <Typography variant="h6" fontWeight={600} color="primary" mb={2}>
+                                        Requested By
+                                    </Typography>
+                                    <Divider sx={{ mb: 2 }} />
+                                    <Grid container spacing={2}>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Name</Typography>
+                                            <Typography fontWeight={500}>{requestDetails.requestedBy?.name}</Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Email</Typography>
+                                            <Typography fontWeight={500}>{requestDetails.requestedBy?.email}</Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Mobile</Typography>
+                                            <Typography fontWeight={500}>{requestDetails.requestedBy?.mobile}</Typography>
+                                        </Grid>
+                                    </Grid>
+                                </Paper>
+                            </>
                         )
                     )}
                 </DialogContent>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import {
     Paper, Button, Dialog, DialogTitle, DialogContent,
-    CircularProgress, Grid, Typography
+    CircularProgress, Grid, Typography, Divider, Box, Chip
 } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -92,10 +92,11 @@ const VariantCreateRequest = () => {
         if (!data || typeof data !== 'object') return null;
 
         return (
-            <Paper elevation={0} sx={{ p: 2, borderRadius: 2, mb: 2 }}>
-                <Typography variant="h6" gutterBottom>
+            <Paper elevation={1} sx={{ p: 3, mb: 3, borderRadius: 2 }}>
+                <Typography variant="h6" fontWeight={600} color="primary" mb={2}>
                     {title}
                 </Typography>
+                <Divider sx={{ mb: 2 }} />
 
                 <Grid container spacing={2}>
                     {Object.entries(data).map(([key, value]) => {
@@ -103,7 +104,10 @@ const VariantCreateRequest = () => {
 
                         return (
                             <Grid item xs={6} key={key}>
-                                <b>{formatLabel(key)}:</b> {renderValue(value)}
+                                <Typography variant="body2" color="text.secondary">
+                                    {formatLabel(key)}
+                                </Typography>
+                                <Typography fontWeight={500}>{renderValue(value)}</Typography>
                             </Grid>
                         );
                     })}
@@ -213,11 +217,15 @@ const VariantCreateRequest = () => {
                 maxWidth="md"
                 fullWidth
             >
-                <DialogTitle>Variant Request Details</DialogTitle>
+                <DialogTitle sx={{ bgcolor: 'success.main', color: 'white', fontWeight: 600 }}>
+                    Variant Create Request Details
+                </DialogTitle>
 
-                <DialogContent dividers sx={{ backgroundColor: '#fafafa' }}>
+                <DialogContent dividers sx={{ bgcolor: '#fafafa', p: 3 }}>
                     {detailsLoading ? (
-                        <CircularProgress />
+                        <Box display="flex" justifyContent="center" p={5}>
+                            <CircularProgress />
+                        </Box>
                     ) : (
                         details && (
                             <>

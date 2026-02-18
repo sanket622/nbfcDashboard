@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Dialog, DialogTitle, DialogContent, Grid, Typography, CircularProgress, Divider } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, Grid, Typography, CircularProgress, Divider, Box, Chip, Paper, Button } from '@mui/material';
 import axios from 'axios';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Paper } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import ReusableTable from '../../subcompotents/ReusableTable';
 import ActivateModal from './ActivateModal';
@@ -239,129 +238,114 @@ const VariantDeleteRequest = () => {
                 maxWidth="md"
                 fullWidth
             >
-                <DialogTitle>Variant Delete Request Details</DialogTitle>
+                <DialogTitle sx={{ bgcolor: 'error.main', color: 'white', fontWeight: 600 }}>
+                    Variant Delete Request Details
+                </DialogTitle>
 
-
-
-                <DialogContent dividers>
+                <DialogContent dividers sx={{ bgcolor: '#fafafa', p: 3 }}>
                     {detailsLoading ? (
-                        <CircularProgress />
+                        <Box display="flex" justifyContent="center" p={5}>
+                            <CircularProgress />
+                        </Box>
                     ) : (
                         variantDetails && (
-                            <Grid container spacing={2}>
-                                {/* Variant Info */}
-                                <Grid item xs={6}>
-                                    <Typography>
-                                        <b>Variant Name:</b>{' '}
-                                        {variantDetails.variantProduct?.variantName}
+                            <>
+                                <Paper elevation={1} sx={{ p: 3, mb: 3, borderRadius: 2 }}>
+                                    <Typography variant="h6" fontWeight={600} color="error" mb={2}>
+                                        Request Information
                                     </Typography>
-                                </Grid>
+                                    <Divider sx={{ mb: 2 }} />
+                                    <Grid container spacing={2}>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Status</Typography>
+                                            <Chip label={variantDetails.status} color={variantDetails.status === 'PENDING' ? 'warning' : variantDetails.status === 'APPROVED' ? 'success' : 'error'} size="small" />
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Created At</Typography>
+                                            <Typography fontWeight={500}>{variantDetails.createdAt ? new Date(variantDetails.createdAt).toLocaleString() : '-'}</Typography>
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <Typography variant="body2" color="text.secondary">Delete Reason</Typography>
+                                            <Typography fontWeight={500} sx={{ bgcolor: '#fff3cd', p: 1.5, borderRadius: 1, mt: 0.5 }}>{variantDetails.reason}</Typography>
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <Typography variant="body2" color="text.secondary">Rejection Reason</Typography>
+                                            <Typography fontWeight={500}>{variantDetails.rejectionReason || 'N/A'}</Typography>
+                                        </Grid>
+                                    </Grid>
+                                </Paper>
 
-                                <Grid item xs={6}>
-                                    <Typography>
-                                        <b>Variant Code:</b>{' '}
-                                        {variantDetails.variantProduct?.variantCode}
+                                <Paper elevation={1} sx={{ p: 3, mb: 3, borderRadius: 2 }}>
+                                    <Typography variant="h6" fontWeight={600} color="primary" mb={2}>
+                                        Variant Information
                                     </Typography>
-                                </Grid>
+                                    <Divider sx={{ mb: 2 }} />
+                                    <Grid container spacing={2}>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Variant ID</Typography>
+                                            <Typography fontWeight={500}>{variantDetails.variantProduct?.variantId}</Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Variant Name</Typography>
+                                            <Typography fontWeight={500}>{variantDetails.variantProduct?.variantName}</Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Variant Code</Typography>
+                                            <Typography fontWeight={500}>{variantDetails.variantProduct?.variantCode}</Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Variant Type</Typography>
+                                            <Typography fontWeight={500}>{variantDetails.variantProduct?.variantType}</Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Product Type</Typography>
+                                            <Typography fontWeight={500}>{variantDetails.variantProduct?.productType}</Typography>
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <Typography variant="body2" color="text.secondary">Remark</Typography>
+                                            <Typography fontWeight={500}>{variantDetails.variantProduct?.remark}</Typography>
+                                        </Grid>
+                                    </Grid>
+                                </Paper>
 
-                                <Grid item xs={6}>
-                                    <Typography>
-                                        <b>Variant ID:</b>{' '}
-                                        {variantDetails.variantProduct?.variantId}
+                                <Paper elevation={1} sx={{ p: 3, mb: 3, borderRadius: 2 }}>
+                                    <Typography variant="h6" fontWeight={600} color="primary" mb={2}>
+                                        Master Product
                                     </Typography>
-                                </Grid>
+                                    <Divider sx={{ mb: 2 }} />
+                                    <Grid container spacing={2}>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Product Name</Typography>
+                                            <Typography fontWeight={500}>{variantDetails.variantProduct?.masterProduct?.productName}</Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Product Code</Typography>
+                                            <Typography fontWeight={500}>{variantDetails.variantProduct?.masterProduct?.productCode}</Typography>
+                                        </Grid>
+                                    </Grid>
+                                </Paper>
 
-                                <Grid item xs={6}>
-                                    <Typography>
-                                        <b>Variant Type:</b>{' '}
-                                        {variantDetails.variantProduct?.variantType}
+                                <Paper elevation={1} sx={{ p: 3, borderRadius: 2 }}>
+                                    <Typography variant="h6" fontWeight={600} color="primary" mb={2}>
+                                        Requested By
                                     </Typography>
-                                </Grid>
-
-                                <Grid item xs={6}>
-                                    <Typography>
-                                        <b>Remark:</b>{' '}
-                                        {variantDetails.variantProduct?.remark}
-                                    </Typography>
-                                </Grid>
-
-                                <Grid item xs={6}>
-                                    <Typography>
-                                        <b>Master Product Name:</b>{' '}
-                                        {variantDetails.variantProduct?.masterProduct?.productName}
-                                    </Typography>
-                                </Grid>
-
-                                <Grid item xs={6}>
-                                    <Typography>
-                                        <b>Master Product Code:</b>{' '}
-                                        {variantDetails.variantProduct?.masterProduct?.productCode}
-                                    </Typography>
-                                </Grid>
-
-                                <Grid item xs={6}>
-                                    <Typography>
-                                        <b>Product Type:</b>{' '}
-                                        {variantDetails.variantProduct?.productType}
-                                    </Typography>
-                                </Grid>
-
-                                <Grid item xs={6}>
-                                    <Typography>
-                                        <b>Status:</b> {variantDetails.status}
-                                    </Typography>
-                                </Grid>
-
-                                <Grid item xs={6}>
-                                    <Typography>
-                                        <b>Delete Reason:</b> {variantDetails.reason}
-                                    </Typography>
-                                </Grid>
-
-                                <Grid item xs={6}>
-                                    <Typography>
-                                        <b>Rejection Reason:</b>{' '}
-                                        {variantDetails.rejectionReason || 'Not Available'}
-                                    </Typography>
-                                </Grid>
-
-                                <Grid item xs={12}>
-                                    <Divider />
-                                </Grid>
-
-
-                                <Grid item xs={6}>
-                                    <Typography>
-                                        <b>Requested By:</b>{' '}
-                                        {variantDetails.requestedBy?.name}
-                                    </Typography>
-                                </Grid>
-
-                                <Grid item xs={6}>
-                                    <Typography>
-                                        <b>Email:</b>{' '}
-                                        {variantDetails.requestedBy?.email}
-                                    </Typography>
-                                </Grid>
-
-                                <Grid item xs={6}>
-                                    <Typography>
-                                        <b>Mobile:</b>{' '}
-                                        {variantDetails.requestedBy?.mobile}
-                                    </Typography>
-                                </Grid>
-
-                                <Grid item xs={6}>
-                                    <Typography>
-                                        <b>Created At:</b>{' '}
-                                        {variantDetails.createdAt
-                                            ? new Date(
-                                                variantDetails.createdAt
-                                            ).toLocaleString()
-                                            : '-'}
-                                    </Typography>
-                                </Grid>
-                            </Grid>
+                                    <Divider sx={{ mb: 2 }} />
+                                    <Grid container spacing={2}>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Name</Typography>
+                                            <Typography fontWeight={500}>{variantDetails.requestedBy?.name}</Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Email</Typography>
+                                            <Typography fontWeight={500}>{variantDetails.requestedBy?.email}</Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" color="text.secondary">Mobile</Typography>
+                                            <Typography fontWeight={500}>{variantDetails.requestedBy?.mobile}</Typography>
+                                        </Grid>
+                                    </Grid>
+                                </Paper>
+                            </>
                         )
                     )}
                 </DialogContent>
