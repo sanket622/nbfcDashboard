@@ -81,8 +81,12 @@ const ManageRoles = () => {
     const dispatch = useDispatch();
     const { associateSubAdmins, loading, error, totalCount, totalPages, roles, modules, success } = useSelector((state) => state.roleModule);
 
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
+    const handleChangePage = (eventOrPage, maybeNewPage) => {
+        const nextPage = typeof eventOrPage === 'number' ? eventOrPage : maybeNewPage;
+
+        if (!Number.isFinite(nextPage)) return;
+
+        setPage(Math.max(1, Math.min(nextPage, totalPages || 1)));
     };
 
     useEffect(() => {
