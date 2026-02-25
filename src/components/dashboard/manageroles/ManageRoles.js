@@ -218,6 +218,11 @@ const ManageRoles = () => {
             label: 'Phone Number',
         },
         {
+            key: 'role',
+            label: 'Roles',
+            render: (_, row) => row.role?.roleName || '-',
+        },
+        {
             key: 'status',
             label: 'Status',
             render: (_, row) => (
