@@ -21,6 +21,8 @@ import { useSnackbar } from 'notistack';
 import ReusableTable from '../../subcompotents/ReusableTable';
 import { fetchCreateRequests, handleCreateRequestApproval } from '../../../redux/managerequest/productRequestSlice';
 import RemarkModal from './RemarkModal';
+import ActivateModal from './ActivateModal';
+import DeleteModal from './DeleteModal';
 
 const ProductCreateRequest = () => {
     const dispatch = useDispatch();
@@ -33,8 +35,8 @@ const ProductCreateRequest = () => {
     const [viewModal, setViewModal] = useState(false);
     const [detailsLoading, setDetailsLoading] = useState(false);
     const [requestDetails, setRequestDetails] = useState(null);
-    const [confirmModal, setConfirmModal] = useState(false);
-    const [actionType, setActionType] = useState(null);
+    const [approveModal, setApproveModal] = useState(false);
+    const [rejectModal, setRejectModal] = useState(false);
     const [selectedRequest, setSelectedRequest] = useState(null);
     const [remarkModalOpen, setRemarkModalOpen] = useState(false);
     const [selectedRow, setSelectedRow] = useState(null);
@@ -43,21 +45,37 @@ const ProductCreateRequest = () => {
         dispatch(fetchCreateRequests());
     }, [dispatch]);
 
-    const openConfirm = (row, action) => {
+    const openApproveModal = (row) => {
         setSelectedRequest(row);
-        setActionType(action);
-        setConfirmModal(true);
+        setApproveModal(true);
     };
 
-    const handleConfirmAction = () => {
+    const openRejectModal = (row) => {
+        setSelectedRequest(row);
+        setRejectModal(true);
+    };
+
+    const handleApprove = () => {
         dispatch(
             handleCreateRequestApproval(
                 selectedRequest.id,
-                actionType,
+                'APPROVE',
                 enqueueSnackbar
             )
         );
-        setConfirmModal(false);
+        setApproveModal(false);
+    };
+
+    const handleReject = (reason) => {
+        dispatch(
+            handleCreateRequestApproval(
+                selectedRequest.id,
+                'REJECT',
+                enqueueSnackbar,
+                reason
+            )
+        );
+        setRejectModal(false);
     };
 
 
@@ -140,7 +158,7 @@ const ProductCreateRequest = () => {
                         color="success"
                         startIcon={<CheckCircleIcon />}
                         sx={{ textTransform: 'none' }}
-                        onClick={() => openConfirm(row, 'APPROVE')}
+                        onClick={() => openApproveModal(row)}
                     >
                         Approve
                     </Button>
@@ -151,20 +169,9 @@ const ProductCreateRequest = () => {
                         color="error"
                         startIcon={<CancelIcon />}
                         sx={{ textTransform: 'none' }}
-                        onClick={() => openConfirm(row, 'REJECT')}
+                        onClick={() => openRejectModal(row)}
                     >
                         Reject
-                    </Button>
-
-                    <Button
-                        size="small"
-                        variant="outlined"
-                        onClick={() => {
-                            setSelectedRow(row);
-                            setRemarkModalOpen(true);
-                        }}
-                    >
-                        Remark
                     </Button>
                 </div>
             ),
@@ -279,44 +286,25 @@ const ProductCreateRequest = () => {
                 </DialogContent>
             </Dialog>
 
-            <Dialog
-                open={confirmModal}
-                onClose={() => setConfirmModal(false)}
-                maxWidth="xs"
-                fullWidth
-            >
-                <DialogTitle>
-                    {actionType === 'APPROVE'
-                        ? 'Approve Product Creation'
-                        : 'Reject Product Creation'}
-                </DialogTitle>
+            {approveModal && (
+                <ActivateModal
+                    selectedUser={{
+                        name: selectedRequest?.productName,
+                    }}
+                    setActivateModal={setApproveModal}
+                    updateUserStatus={handleApprove}
+                />
+            )}
 
-                <DialogContent>
-                    <Typography>
-                        Are you sure you want to{' '}
-                        <b>{actionType?.toLowerCase()}</b> this product creation request?
-                    </Typography>
-                </DialogContent>
-
-                <Divider />
-
-                <div style={{ display: 'flex', justifyContent: 'flex-end', padding: 16, gap: 8 }}>
-                    <Button
-                        variant="outlined"
-                        onClick={() => setConfirmModal(false)}
-                    >
-                        Cancel
-                    </Button>
-
-                    <Button
-                        variant="contained"
-                        color={actionType === 'APPROVE' ? 'success' : 'error'}
-                        onClick={handleConfirmAction}
-                    >
-                        Confirm
-                    </Button>
-                </div>
-            </Dialog>
+            {rejectModal && (
+                <DeleteModal
+                    selectedUser={{
+                        name: selectedRequest?.productName,
+                    }}
+                    setDeleteModal={setRejectModal}
+                    handleDelete={handleReject}
+                />
+            )}
 
             {remarkModalOpen && (
                 <RemarkModal

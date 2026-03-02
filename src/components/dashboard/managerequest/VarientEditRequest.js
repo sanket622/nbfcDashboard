@@ -194,16 +194,6 @@ const VariantEditRequest = () => {
                             >
                                 Reject
                             </Button>
-                            <Button
-                                size="small"
-                                variant="outlined"
-                                onClick={() => {
-                                    setSelectedRow(row);
-                                    setRemarkModalOpen(true);
-                                }}
-                            >
-                                Remark
-                            </Button>
                         </>
                     ) : (
                         <span style={{ color: '#888' }}>No Action</span>

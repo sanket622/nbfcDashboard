@@ -191,17 +191,6 @@ const ProductEditRequest = () => {
                         >
                             Reject
                         </Button>
-
-                        <Button
-                            size="small"
-                            variant="outlined"
-                            onClick={() => {
-                                setSelectedRow(row);
-                                setRemarkModalOpen(true);
-                            }}
-                        >
-                            Remark
-                        </Button>
                     </div>
                 ) : (
                     <span style={{ color: '#888' }}>No Action</span>
