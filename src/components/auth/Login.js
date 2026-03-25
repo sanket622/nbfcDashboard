@@ -86,7 +86,7 @@ const Login = () => {
           <div className="mb-4">
             <span className="text-[#535353] text-[18px]">Welcome to</span>
             <span className="font-semibold ml-1 text-[#535353] text-[18px]">
-              EarnPlus
+              l2g
             </span>
           </div>
 
